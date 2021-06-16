@@ -12,4 +12,12 @@
     <select id="getMenus" parameterType="com.Qcat.Qcat.market.dto.MenuDto" resultType="com.Qcat.Qcat.market.dto.MenuDto">
         SELECT * FROM product WHERE store_id = #{store_id}
     </select>
+
+    <select id="getCatMenu" parameterType="com.Qcat.Qcat.market.dto.MenuDto" resultType="com.Qcat.Qcat.market.dto.MenuDto">
+        SELECT * FROM product WHERE store_id = #{store_id} AND category = #{category}
+    </select>
+
+    <select id="getPaging" resultType="com.Qcat.Qcat.market.dto.MenuDto">
+        select * from product WHERE store_id = #{dto.store_id} AND category = #{dto.category}  LIMIT #{cri.amount} OFFSET #{cri.offset}
+    </select>
 </mapper>

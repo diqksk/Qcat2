@@ -1,14 +1,13 @@
 package com.Qcat.Qcat.market.Controller;
 
+import com.Qcat.Qcat.market.domain.Criteria;
 import com.Qcat.Qcat.market.dto.MenuDto;
+import com.Qcat.Qcat.market.dto.PageDTO;
 import com.Qcat.Qcat.market.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class TestController {
@@ -40,14 +39,38 @@ public class TestController {
         return "/market/register";
     }
 
-    @GetMapping("menuList")
-    public String getMenuLit(Model model){
+    @GetMapping("/menuList/{store_id}")
+    public String getMenuLit(@PathVariable("store_id") int store_id, Model model){
 
+        System.out.println(store_id);
         MenuDto dto = new MenuDto();
-        dto.setStore_id(1);
-
+        dto.setStore_id(store_id);
         model.addAttribute("menuList",menuService.getMenus(dto));
 
         return "/market/marketDetail";
+    }
+
+    @GetMapping("/menuDetailList/{category}/{store_id}/{page}")
+    public String getMenuLit(@PathVariable("store_id") int store_id
+            ,@PathVariable("category") String category
+                             ,@PathVariable("page") int page
+                             ,Model model){
+
+        System.out.println(store_id);
+        MenuDto dto = new MenuDto();
+        dto.setStore_id(store_id);
+        dto.setCategory(category);
+
+        int amount = 5;
+
+
+        Criteria cri = new Criteria(page,amount);
+        int total=(int)Math.ceil(menuService.getCatMenu(dto).size()*1.0/amount);
+        System.out.println(total+"토탈탈탈");
+        
+        model.addAttribute("menuList",menuService.getPaging(dto,cri));
+        model.addAttribute("total", total);
+
+        return "/market/marketCategoryDetail";
     }
 }
