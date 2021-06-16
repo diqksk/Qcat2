@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" th:href="@{/style.css}">
+
+    <link rel="icon" th:href="@{/img/core-img/favicon.ico}">
+
+
+
+    <!-- ##### All Javascript Script ##### -->
+    <!-- jQuery-2.2.4 js -->
+    <script th:src="@{/js/jquery/jquery-2.2.4.min.js}"></script>
+
+
+    <title>Title</title>
+</head>
+<body>
+    <th:block th:replace="/layout/header.html :: header"></th:block>
+
+    <main>
+        <div class="container">
+            <div class="inform_bar">
+                <div class="inform_room"><span style="margin-left: 30px;">메시지</span></div>
+                <div class="inform_chat"><div style="margin-left: 50px; font-weight: bold" id="hostnick">채팅 내용</div>
+                    <div id="orderZone">
+                        <!-- 결제승인버튼이 나오는 곳입니다 -->
+                    </div>
+                </div>
+                <div class="inform_board"><span style="margin-left: 30px">세부 내용</span></div>
+            </div>
+
+            <div class="totalContainer">
+                <div id="roomContainer" class="roomContainer">
+                    <table id="roomList" class="roomList">
+                        <tbody class="chatRooms">
+                        <tr class="chat_tr">
+                            <td class='room' style="display: flex;">
+                                <div style="display: flex; align-items: center; margin-right: 10px;">
+                                    <p style="background: gray; width:30px; height: 30px; text-align: center; color: white; font-weight: bold; border-radius: 50%; line-height: 30px; " th:text="${#strings.substring(list.room_host,1,2)}"></p>
+                                </div>
+                                <div>
+                                    <p style="font-size: 18px; width:200px;"></p>
+                                    <p ></p>
+                                    <div style="display: flex; justify-content: space-between">
+                                        <p></p>
+                                        <p style="margin-right: 5px; font-size: 8px;color: gray"></p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div id="yourName">
+                        <th><input type="text" name="userName" id="userName"></th>
+                    </div>
+                </div>
+
+                <div class="chatRoomContainer" id="chatRoomContainer">
+                    <!-- 채팅방이 들어가는 구역입니다  -->
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </main>
+
+    <th:block th:replace="/layout/footer.html :: footer"></th:block>
+
+
+    <script th:inline="javascript" defer>
+        let wsk= new WebSocket("ws://localhost");
+
+        function getNowChat(number){
+            $.ajax({
+                type: 'POST',
+                url: '/getNowChat',
+                data:JSON.stringify({room_id: number}),
+                success:(datas)=>{
+                    console.log(datas[datas.length-1].chat_content);
+                    console.log(datas[datas.length-1].chat_date);
+                }
+            });
+
+
+        }
+
+        window.onload = function(){
+            createRoom();
+        }
+
+
+        function createRoom() {
+            let msg = {roomName: 'marketName', roomNumber: 1};  //가게의 이름
+            console.log(msg);
+            commonAjax('/createRoom', msg, 'POST', function (result) {
+                goRoom(msg.roomNumber, msg.roomName);
+            });
+        }
+
+        function goRoom(number, name) {
+            $.ajax({
+                url:"/moveChating?roomName=" + name + "&" + "roomNumber=" + number,
+                type:'GET',
+                success:(dto)=>{
+                    chatName(dto)
+                }
+            });
+
+        }
+
+
+        function commonAjax(url, parameter, type, calbak, contentType) {
+            $.ajax({
+                url: url,
+                data: parameter,
+                type: type,
+                contentType: contentType != null ? contentType : 'application/x-www-form-urlencoded; charset=UTF-8',
+                success: function (res) {
+                    calbak(res);
+                },
+                error: function (err) {
+                    console.log('error');
+                    calbak(err);
+                }
+            });
+        }
+
+
+        function chatName(dto){
+            console.log(dto);
+            wsk.close();
+            wsOpen(dto);
+        }
+
+        ;
+
+        function wsOpen(dto){
+            //웹소켓 전송시 현재 방의 번호를 넘겨서 보낸다.
+            wsk = new WebSocket("ws://" + location.host + "/chating/"+dto.roomNumber);
+            wsEvt(dto);
+        }
+
+        function wsEvt(dto) {
+            wsk.onopen = function(data) {
+                //소켓이 열리면 동작
+                let chatRoomContainer = document.getElementById('chatRoomContainer');
+                let html = '<input type="hidden" id="sessionId" value="">' +
+                    '<input type="hidden" id="roomNumber" value="'+dto.roomNumber+'">' +
+                    '<div id="chating" class="chating">'
+
+                for (list of dto.lists) {
+                    let newDate = getFormatDate(list.chat_date);
+                    if (list.chat_writer === [[${session.nickname}]]) {
+                        html += "<div class='chat_total'>" +
+                            "<div class='img_me'>나</div>" +
+                            "<div class='chat_content'>" +
+                            "<p class='chat_head'><span>" + list.chat_writer + "</span><span style='font-size: 8px; margin-left: 5px; color: gray;'>" + newDate + "</span></p>" +
+                            "<p class='chat_bottom'>" + list.chat_content + "</p>" +
+                            "</div>" +
+                            "</div>";
+                    } else {
+                        html += "<div class='chat_total'>" +
+                            "<div class='img_you'>Y</div>" +
+                            "<div class='chat_content'>" +
+                            "<p class='chat_head'><span>" + list.chat_writer + "</span><span style='font-size: 8px; margin-left: 5px; color: gray;'>" + newDate + "</span></p>" +
+                            "<p class='chat_bottom'>" + list.chat_content + "</p>" +
+                            "</div>" +
+                            "</div>";
+                    }
+                }
+                html += '</div>' +
+                    '      <div id="yourMsg">' +
+                    '        <div class="inputTable" style="height: 30px; width:450px; text-align: center; border:1px solid rgb(235,235,235); border-radius: 20px;">' +
+                    '            <input id="chatting" style="width:400px; border: none; background: none;  padding:10px;" placeholder="보내실 메시지를 입력하세요.">' +
+                    '        </div>' +
+                    '      </div>' +
+                    '<input id="roomNum" type="hidden" value="'+dto.roomNumber+'">';
+
+                chatRoomContainer.innerHTML = html;
+                getBtn(dto);
+                $('#yourMsg').show();
+                $('#yourMsg').css('display', 'flex');
+                $('#yourMsg').css('justify-content', 'center');
+                $("#chating").scrollTop($("#chating")[0].scrollHeight);
+                boardInform(dto);
+            }
+
+            wsk.onmessage = function(data) {
+                //메시지를 받으면 동작
+                let date = new Date();
+                let dates = getFormatDate2(date);
+                let msg = data.data;
+                if(msg != null && msg.trim() != ''){
+                    let d = JSON.parse(msg);
+                    console.log(msg);
+                    if(d.type == "getId"){
+                        let si = d.sessionId != null ? d.sessionId : "";
+                        if(si != ''){
+                            $("#sessionId").val(si);
+                        }
+                    }else if(d.type == "message"){
+                        if(d.sessionId == $("#sessionId").val()){
+                            $("#chating").append(
+                                "<div class='chat_total'>" +
+                                "<div class='img_me'>나</div>" +
+                                "<div class='chat_content'>" +
+                                "<p class='chat_head'><span>" + d.userName + "</span><span style='font-size: 8px; margin-left: 5px; color: gray;'>" + dates + "</span></p>" +
+                                "<p class='chat_bottom'>" + d.msg + "</p>" +
+                                "</div>" +
+                                "</div>"
+                            );
+                        }else{
+                            $("#chating").append(
+                                "<div class='chat_total'>" +
+                                "<div class='img_you'>Y</div>" +
+                                "<div class='chat_content'>" +
+                                "<p class='chat_head'><span>" + d.userName + "</span><span style='font-size: 8px; margin-left: 5px; color: gray;'>" + dates + "</span></p>" +
+                                "<p class='chat_bottom'>" + d.msg + "</p>" +
+                                "</div>" +
+                                "</div>"
+                            );
+                        }
+                        $("#chating").scrollTop($("#chating")[0].scrollHeight);
+                    }else{
+                        console.warn("unknown type!")
+                    }
+                }
+            }
+
+            document.addEventListener("keydown", function(e){
+                const chat = document.getElementById('chatting');
+                if(e.keyCode == 13){ //enter press
+                    console.log("엔터키눌렷다!");
+                    if(chat.value!==""){
+                        send();
+                    }else{
+                        console.log("공백?");
+                    }
+                }
+            });
+        }
+
+
+        function send() {
+            let option ={
+                type: "message",
+                roomNumber: $("#roomNumber").val(),
+                sessionId : $("#sessionId").val(),
+                userName : $("#userName").val(),
+                msg : $("#chatting").val()
+            }
+            wsk.send(JSON.stringify(option))
+
+            let json = {
+                room_id: document.getElementById('roomNum').value,
+                chat_writer: $("#userName").val(),
+                chat_content: $("#chatting").val()
+            };
+
+            $.ajax({
+                url:'/insertChat',
+                type: 'POST',
+                data: JSON.stringify(json),
+                contentType: "application/json; charset=UTF-8",
+                success:(result)=>{
+                    console.log(result);
+                }
+            });
+
+
+            $('#chatting').val("");
+        }
+
+        function accept(dto){
+            console.log('어셉트눌립');
+            let upStatus = dto.roomStatus.room_status+1;
+            console.log(upStatus);
+            $.ajax({
+                url: '/accept',
+                data: JSON.stringify({room_id: dto.roomNumber, room_status: upStatus}),
+                type: 'POST',
+                contentType: "application/json; charset=UTF-8",
+                success: () => {
+                    dto.roomStatus.room_status += 1;
+                    getBtn(dto);
+                }
+            });
+        }
+
+        function refuse(dto){
+            console.log('어셉트눌립');
+            let upStatus = dto.roomStatus.room_status-1;
+            console.log(upStatus);
+            $.ajax({
+                url: '/accept',
+                data: JSON.stringify({room_id: dto.roomNumber, room_status: upStatus}),
+                type: 'POST',
+                contentType: "application/json; charset=UTF-8",
+                success: () => {
+                    dto.roomStatus.room_status -= 1;
+                    getBtn(dto);
+                }
+            });
+        }
+
+        function getBtn(dto) {
+
+            const orderZone = document.getElementById('orderZone');
+            console.log(dto);
+            console.log('버튼눌림');
+            if (dto.roomStatus.room_status === 0) {
+                if (dto.roomStatus.room_host !== [[${session.nickname}]]) {
+                    orderZone.innerHTML = "<input type='button' id='Btn' value='구매요청'>";
+                    document.getElementById('Btn').addEventListener('click', () => {
+                        accept(dto);
+                    });
+                }else{
+                    orderZone.innerHTML = "";
+                }
+            } else if (dto.roomStatus.room_status === 1) {
+                if (dto.roomStatus.room_host === [[${session.nickname}]]) {
+                    orderZone.innerHTML = "<input type='button' id='Btn' value='요청수락'><input type='button' id='refuseBtn' value='거절'>";
+                    document.getElementById('Btn').addEventListener('click', () => {
+                        accept(dto);
+                    });
+                    document.getElementById('refuseBtn').addEventListener('click', () => {
+                        refuse(dto);
+                    });
+                } else {
+                    orderZone.innerHTML = '<input type="button" value="요청대기" disabled>';
+                }
+
+            } else if (dto.roomStatus.room_status === 2) {
+                if (dto.roomStatus.room_host === [[${session.nickname}]]) {
+                    orderZone.innerHTML = '<input type="button" value="결제대기" disabled>';
+                } else {
+                    orderZone.innerHTML = '<input type="button" id="pay" value="결제하기">';
+                    document.getElementById('pay').addEventListener('click', () => {
+                        pay(dto);
+                    });
+                }
+
+            } else if (dto.roomStatus.room_status === 3) {
+                if (dto.roomStatus.room_host === [[${session.nickname}]]) {
+                    orderZone.innerHTML = '<input type="button" value="후기남기기" onclick="goReview(' + dto.roomNumber + ',' + dto.roomStatus.room_user + ')">';
+                } else {
+                    orderZone.innerHTML = '<input type="button" value="후기남기기" onclick="goReview(' + dto.roomNumber + ',' + dto.roomStatus.room_host + ')">';
+                }
+
+            } else if (dto.roomStatus.room_status === 4) {
+                if (dto.roomStatus.room_host === [[${session.nickname}]]) {
+                    orderZone.innerHTML = '<input type="button" value="거래완료" disabled>';
+                } else {
+                    orderZone.innerHTML = '<input type="button" value="거래완료">';
+                }
+            }
+        }
+
+        function boardInform(dto){
+            let title = dto.boardStatus.title;
+            let host = dto.roomStatus.room_host;
+            let regDate = dto.boardStatus.reg_date;
+            let image = dto.boardStatus.image;
+            let content = dto.boardStatus.content
+            let price = numberWithCommas(dto.boardStatus.price);
+            const marketUserName = document.getElementById('marketUserName');
+            const marketRegDate = document.getElementById('marketRegDate');
+            const marketTitle = document.getElementById('marketTitle');
+            const marketContent = document.getElementById('marketContent');
+            const marketPrice = document.getElementById('marketPrice');
+
+            marketUserName.innerText = host+'님의 게시글';
+            marketRegDate.innerText = regDate;
+            marketTitle.innerText = title;
+            marketContent.innerHTML = content;
+            marketPrice.innerText = '가격 : ' + price + ' ￦';
+        }
+
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function getFormatDate(inputDate){
+            console.log(typeof inputDate);
+            console.log(inputDate);
+            let monthAndDay = inputDate.substr(0, 5);
+            let timeAndMinute = inputDate.substr(13, 5);
+            let amPm = inputDate.substr(20, 2);
+            console.log(inputDate.substr(13, 1));
+            if(inputDate.substr(13,1) !== '0'){
+                timeAndMinute = inputDate.substr(13, 4);
+                amPm = inputDate.substr(21, 2);
+            }
+
+            return monthAndDay + ', ' + timeAndMinute + ', ' + amPm;
+        }
+
+        function getFormatDate2(date){
+            let time = date.getHours();
+            let minute = date.getMinutes();
+            return  `${time}:${minute}`;
+        }
+
+        function goReview(room_id,user_nick){
+            location.href = '/goReview/' + room_id + '/' + user_nick;
+        }
+    </script>
+    <!-- Popper js -->
+    <script th:src="@{/js/bootstrap/popper.min.js}"></script>
+    <!-- Bootstrap js -->
+    <script th:src="@{/js/bootstrap/bootstrap.min.js}"></script>
+    <!-- All Plugins js -->
+    <script th:src="@{/js/plugins/plugins.js}"></script>
+    <!-- Active js -->
+    <script th:src="@{/js/active.js}"></script>
+</body>
+</html>

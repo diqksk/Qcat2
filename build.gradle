@@ -26,6 +26,14 @@ dependencies {
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+//	썸네일용
+	implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.8'
+
+
+	//웹소켓용
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-websocket', version: '2.4.0'
+	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 }
 
 test {

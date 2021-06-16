@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.Qcat.Qcat.market.repository.MenuMapper">
+
+    <insert id="insertMenu" parameterType="com.Qcat.Qcat.market.dto.MenuDto">
+        INSERT INTO product(store_id, category, product_name, content, price, img)
+        VALUES(#{store_id},#{category},#{product_name},#{content},#{price},#{img})
+    </insert>
+
+    <select id="getMenus" parameterType="com.Qcat.Qcat.market.dto.MenuDto" resultType="com.Qcat.Qcat.market.dto.MenuDto">
+        SELECT * FROM product WHERE store_id = #{store_id}
+    </select>
+</mapper>
