@@ -18,16 +18,6 @@ public class TestController {
     @GetMapping("test")
     public String test(){
 
-        MenuDto dto = new MenuDto();
-
-        dto.setContent("콘텐트연습");
-        dto.setImg("/upload/img.png");
-        dto.setCategory("치킨");
-        dto.setPrice(5000);
-        dto.setProduct_name("맛난치킨");
-        dto.setStore_id(1);
-
-
         return "/market/register";
     }
 
@@ -43,10 +33,8 @@ public class TestController {
     public String getMenuLit(@PathVariable("store_id") int store_id, Model model){
 
         System.out.println(store_id);
-        MenuDto dto = new MenuDto();
-        dto.setStore_id(store_id);
-        model.addAttribute("menuList",menuService.getMenus(dto));
-
+        model.addAttribute("menuList",menuService.getMenus(store_id));
+        model.addAttribute("categories",menuService.getCategoryCount(store_id));
         return "/market/marketDetail";
     }
 

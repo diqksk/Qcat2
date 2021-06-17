@@ -16,6 +16,21 @@
     <!-- jQuery-2.2.4 js -->
     <script th:src="@{/js/jquery/jquery-2.2.4.min.js}"></script>
 
+    <style>
+        #treadingPost{
+            -ms-overflow-style: none; /* IE and Edge */
+            overflow: auto;
+        }
+        #treadingPost::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera*/
+            overflow: auto;
+        }
+        .oneItem:hover{
+            transition: all 0.3s;
+            background: #dadfe5;
+            cursor: pointer;
+        }
+    </style>
 
     <title>Title</title>
 </head>
@@ -32,451 +47,81 @@
             <h4>Treading Post</h4>
 
             <!-- Single Blog Post -->
-            <div class="single-blog-post style-1 d-flex flex-wrap mb-30" th:each="menu : ${menuList}">
-                <!-- Blog Thumbnail -->
-                <div class="blog-thumbnail">
-                    <img src="img/bg-img/9.jpg" alt="">
-                </div>
-                <!-- Blog Content -->
-                <div class="blog-content">
-                    <a href="#" class="post-tag">The Best</a>
-                    <a href="#" class="post-title">Friend eggs with ham</a>
-                    <div class="post-meta">
-                        <a href="#" class="post-date">5,000</a>
-                        <a href="#" class="post-author">
-                            <div>
-                                <input type="button" value="+" style="height: 18px; width:13px; border:none;">
-                                <input type="text" value="0" style="width:20%; height: 18px; border:none;">
-                                <input type="button" value="-" style="height: 18px; width:13px; border:none;">
-                            </div>
-                        </a>
-                    </div>
-                </div>
+            <div id="Bucket">
+                    <!-- 새로 추가한 이미지들이 올라가는곳-->
             </div>
 
-            <!-- Single Blog Post -->
-            <div class="single-blog-post style-1 d-flex flex-wrap mb-30">
-                <!-- Blog Thumbnail -->
-                <div class="blog-thumbnail">
-                    <img src="img/bg-img/10.jpg" alt="">
-                </div>
-                <!-- Blog Content -->
-                <div class="blog-content">
-                    <a href="#" class="post-tag">The Best</a>
-                    <a href="#" class="post-title">Mushrooms with pork chop</a>
-                    <div class="post-meta">
-                        <a href="#" class="post-date">6,000</a>
-                        <a href="#" class="post-author">
+            <div id="priceArea">
+                <div style="height: 50px; ">
+                    <div style="border-bottom:1px solid rgb(235, 235, 235);">
+                        <div style="margin-bottom: 10px;" id="priceItem">
                             <div>
-                                <input type="button" value="+" style="height: 18px; width:13px; border:none;">
-                                <input type="text" value="0" style="width:20%; height: 18px; border:none;">
-                                <input type="button" value="-" style="height: 18px; width:13px; border:none;">
+                                <div style="width: 70%; font-size:14px; padding:0; margin:0; font-weight: 400;">
+                                    <span>mushrooms</span>
+                                </div>
+                                <div style="padding:0; margin:0; font-size:10px;">
+                                    <span>5000 x 5 = 25000</span>
+                                </div>
                             </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Single Blog Post -->
-            <div class="single-blog-post style-1 d-flex flex-wrap mb-30">
-                <!-- Blog Thumbnail -->
-                <div class="blog-thumbnail">
-                    <img src="img/bg-img/11.jpg" alt="">
-                </div>
-                <!-- Blog Content -->
-                <div class="blog-content">
-                    <a href="#" class="post-tag">The Best</a>
-                    <a href="#" class="post-title">Birthday cake with chocolate</a>
-                    <div class="post-meta">
-                        <a href="#" class="post-date">25,000</a>
-                        <a href="#" class="post-author">
-                            <div>
-                                <input type="button" value="+" style="height: 18px; width:13px; border:none;">
-                                <input type="text" value="0" style="width:20%; height: 18px; border:none;">
-                                <input type="button" value="-" style="height: 18px; width:13px; border:none;">
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Single Blog Post -->
-            <div class="single-blog-post style-1 d-flex flex-wrap mb-30">
-                <!-- Blog Thumbnail -->
-                <div class="blog-thumbnail">
-                    <img src="img/bg-img/9.jpg" alt="">
-                </div>
-                <!-- Blog Content -->
-                <div class="blog-content">
-                    <a href="#" class="post-tag">The Best</a>
-                    <a href="#" class="post-title">Friend eggs with ham</a>
-                    <div class="post-meta">
-                        <a href="#" class="post-date">11,000</a>
-                        <a href="#" class="post-author">
-                            <div>
-                                <input type="button" value="+" style="height: 18px; width:13px; border:none;">
-                                <input type="text" value="0" style="width:20%; height: 18px; border:none;">
-                                <input type="button" value="-" style="height: 18px; width:13px; border:none;">
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Single Blog Post -->
-            <div class="single-blog-post style-1 d-flex flex-wrap mb-30">
-                <!-- Blog Thumbnail -->
-                <div class="blog-thumbnail">
-                    <img src="img/bg-img/10.jpg" alt="">
-                </div>
-                <!-- Blog Content -->
-                <div class="blog-content">
-                    <a href="#" class="post-tag">The Best</a>
-                    <a href="#" class="post-title">Mushrooms with pork chop</a>
-                    <div class="post-meta">
-                        <a href="#" class="post-date">23,000</a>
-                        <a href="#" class="post-author">
-                            <div>
-                                <input type="button" value="+" style="height: 18px; width:13px; border:none;">
-                                <input type="text" value="0" style="width:20%; height: 18px; border:none;">
-                                <input type="button" value="-" style="height: 18px; width:13px; border:none;">
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Single Blog Post -->
-            <div class="single-blog-post style-1 d-flex flex-wrap mb-30">
-                <!-- Blog Thumbnail -->
-                <div class="blog-thumbnail">
-                    <img src="img/bg-img/11.jpg" alt="">
-                </div>
-                <!-- Blog Content -->
-                <div class="blog-content">
-                    <a href="#" class="post-tag">The Best</a>
-                    <a href="#" class="post-title">Birthday cake with chocolate</a>
-                    <div class="post-meta">
-                        <a href="#" class="post-date">7,300</a>
-                        <a href="#" class="post-author">
-                            <div>
-                                <input type="button" value="+" style="height: 18px; width:13px; border:none;">
-                                <input type="text" value="0" style="width:20%; height: 18px; border:none;">
-                                <input type="button" value="-" style="height: 18px; width:13px; border:none;">
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div style="height: 50px; ">
-                <div style="border-bottom:1px solid rgb(235, 235, 235);">
-                    <div style="margin-bottom: 10px;">
-                        <div style="width: 70%; font-size:14px; padding:0; margin:0; font-weight: 400;">
-                            <span>mushrooms</span>
                         </div>
-                        <div style="padding:0; margin:0; font-size:10px;">
-                            <span>5000 x 5 = 25000</span>
+                        <div style="padding:13px 0 0 0; margin:0 0 20px 0; font-size:14px; font-weight: 600; display: flex; justify-content: space-between; align-items: baseline;">
+                            <div><span>Price:</span><span id="totalPrice">100,000</span>₩</div>
+                            <input type="button" value="Buy" style="border:none; background:rgb(190,210,210); border-radius:20px; padding:5px 10px;">
                         </div>
-                    </div>
-                    <div style="margin-bottom: 10px;">
-                        <div style="width: 70%; font-size:14px; padding:0; margin:0 0 3px 0; font-weight: 400;">
-                            <span>Friend eggs with ham</span>
-                        </div>
-                        <div style="padding:0; margin:0; font-size:10px;">
-                            <span>5000 x 5 = 25000</span>
-                        </div>
-                    </div>
-                    <div style="margin-bottom: 10px;">
-                        <div style="width: 70%; font-size:14px; padding:0; margin:0 0 3px 0; font-weight: 400;">
-                            <span>Mushrooms with pork chop</span>
-                        </div>
-                        <div style="padding:0; margin:0; font-size:10px;">
-                            <span>5000 x 5 = 25000</span>
-                        </div>
-                    </div>
-                    <div style="margin-bottom: 10px;">
-                        <div style="width: 70%; font-size:14px; padding:0; margin:0 0 3px 0; font-weight: 400;">
-                            <span>mushrooms</span>
-                        </div>
-                        <div style="padding:0; margin:0; font-size:10px;">
-                            <span>5000 x 5 = 25000</span>
-                        </div>
-                    </div>
-                    <div style="padding:13px 0 0 0; margin:0 0 20px 0; font-size:14px; font-weight: 600; display: flex; justify-content: space-between; align-items: baseline;">
-                        <div>Price: 100,000 ₩</div>
-                        <input type="button" value="Buy" style="border:none; background:rgb(190,210,210); border-radius:20px; padding:5px 10px;">
                     </div>
                 </div>
             </div>
         </div>
-        <!-- ##### Treading Post Area End ##### -->
 
-        <!-- ##### Search Area Start ##### -->
-        <div class="bueno-search-area bg-img" style="background-image: url(img/core-img/pattern.png); padding:10px 0; font-size: 20px; font-weight: bold;">
-            <div style="text-align: center;">
-                <span>Best menu</span>
-            </div>
-        </div>
+
         <div style="text-align: right; padding-right: 20px;">
             <span>후기 보기 >></span>
         </div>
-        <!-- ##### Search Area End ##### -->
 
-        <!-- ##### Catagory Post Area Start ##### -->
-        <div class="catagory-post-area section-padding-100">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <!-- Post Area -->
-                    <div class="col-12 col-lg-8 col-xl-9">
-                        <!-- Single Blog Post -->
-                        <div class="single-blog-post style-1 d-flex flex-wrap mb-30" th:each="menu : ${menuList}">
-                            <!-- Blog Thumbnail -->
-                            <div class="blog-thumbnail">
-                                <img th:src="|/display?fileName=${menu.img}|" alt="">
-                            </div>
-                            <!-- Blog Content -->
-                            <div class="blog-content">
-                                <a href="#" class="post-tag" th:text="${menu.category}">The Best</a>
-                                <a href="#" class="post-title" th:text="${menu.product_name}">Friend eggs with ham</a>
-                                <div class="post-meta">
-                                    <a href="#" class="post-date">July 11, 2018</a>
-                                    <a href="#" class="post-author" th:text="${menu.price}">By Julia Stiles</a>
+        <div th:each="cate : ${categories} ">
+            <div class="bueno-search-area bg-img" style="background-image: url(/display?fileName=img/core-img/pattern.png); padding:10px 0; font-size: 20px; font-weight: bold;">
+                <div style="text-align: center;">
+                    <span class="categori-title" th:text="${cate.category}">Best menu</span>
+                </div>
+            </div>
+
+
+            <!-- ##### Catagory Post Area Start ##### -->
+            <div class="catagory-post-area section-padding-100">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <!-- Post Area -->
+                        <div class="col-12 col-lg-8 col-xl-9">
+
+                            <!-- Single Blog Post -->
+                            <div class="single-blog-post style-1 d-flex flex-wrap mb-30 oneItem" th:each="menu : ${menuList}"
+                                                      th:if="${cate.category == menu.category}" th:onclick="addBucket([[${menu}]])">
+                                <input type="hidden" th:value="${menu.category}" class="categories">
+                                <!-- Blog Thumbnail -->
+                                <div class="blog-thumbnail">
+                                    <img th:src="|/display?fileName=${menu.img}|" style="height: 250px;" alt="">
                                 </div>
-                                <p th:text="${menu.content}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc tristique justo id elit bibendum pharetra non vitae lectus. Mauris libero felis, dapibus a ultrices sed, commodo vitae odio. Sed auctor tellus quis arcu tempus.</p>
+                                <!-- Blog Content -->
+                                <div class="blog-content">
+                                    <a href="#" class="post-tag" th:text="${menu.category}">The Best</a>
+                                    <a href="#" class="post-title" th:text="${menu.product_name}">Friend eggs with ham</a>
+                                    <div class="post-meta">
+                                        <a href="#" class="post-date">July 11, 2018</a>
+                                        <a href="#" class="post-author" th:text="${menu.price}">By Julia Stiles</a>
+                                    </div>
+                                    <p th:text="${menu.content}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc tristique justo id elit bibendum pharetra non vitae lectus. Mauris libero felis, dapibus a ultrices sed, commodo vitae odio. Sed auctor tellus quis arcu tempus.</p>
+                                </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-
-        <div class="bueno-search-area bg-img" style="background-image: url(img/core-img/pattern.png); padding:10px 0; font-size: 20px; font-weight: bold;">
-            <div style="text-align: center;">
-                <span>Chicken</span>
-            </div>
-        </div>
-
-        <div class="catagory-post-area section-padding-100">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <!-- Post Area -->
-                    <div class="col-12 col-lg-8 col-xl-9">
-                        <!-- Single Blog Post -->
-                        <div class="single-blog-post style-1 d-flex flex-wrap mb-30">
-                            <!-- Blog Thumbnail -->
-                            <div class="blog-thumbnail">
-                                <img src="img/bg-img/9.jpg" alt="">
-                            </div>
-                            <!-- Blog Content -->
-                            <div class="blog-content">
-                                <a href="#" class="post-tag">The Best</a>
-                                <a href="#" class="post-title">Friend eggs with ham</a>
-                                <div class="post-meta">
-                                    <a href="#" class="post-date">July 11, 2018</a>
-                                    <a href="#" class="post-author">By Julia Stiles</a>
-                                </div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc tristique justo id elit bibendum pharetra non vitae lectus. Mauris libero felis, dapibus a ultrices sed, commodo vitae odio. Sed auctor tellus quis arcu tempus.</p>
-                            </div>
-                        </div>
-
-                        <!-- Single Blog Post -->
-                        <div class="single-blog-post style-1 d-flex flex-wrap mb-30">
-                            <!-- Blog Thumbnail -->
-                            <div class="blog-thumbnail">
-                                <img src="img/bg-img/10.jpg" alt="">
-                            </div>
-                            <!-- Blog Content -->
-                            <div class="blog-content">
-                                <a href="#" class="post-tag">The Best</a>
-                                <a href="#" class="post-title">Mushrooms with pork chop</a>
-                                <div class="post-meta">
-                                    <a href="#" class="post-date">July 11, 2018</a>
-                                    <a href="#" class="post-author">By Julia Stiles</a>
-                                </div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc tristique justo id elit bibendum pharetra non vitae lectus. Mauris libero felis, dapibus a ultrices sed, commodo vitae odio. Sed auctor tellus quis arcu tempus.</p>
-                            </div>
-                        </div>
-
-                        <!-- Single Blog Post -->
-                        <div class="single-blog-post style-1 d-flex flex-wrap mb-30">
-                            <!-- Blog Thumbnail -->
-                            <div class="blog-thumbnail">
-                                <img src="img/bg-img/11.jpg" alt="">
-                            </div>
-                            <!-- Blog Content -->
-                            <div class="blog-content">
-                                <a href="#" class="post-tag">The Best</a>
-                                <a href="#" class="post-title">Birthday cake with chocolate</a>
-                                <div class="post-meta">
-                                    <a href="#" class="post-date">July 11, 2018</a>
-                                    <a href="#" class="post-author">By Julia Stiles</a>
-                                </div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc tristique justo id elit bibendum pharetra non vitae lectus. Mauris libero felis, dapibus a ultrices sed, commodo vitae odio. Sed auctor tellus quis arcu tempus.</p>
-                            </div>
-                        </div>
-
-                        <!-- Single Blog Post -->
-                        <div class="single-blog-post style-1 d-flex flex-wrap mb-30">
-                            <!-- Blog Thumbnail -->
-                            <div class="blog-thumbnail">
-                                <img src="img/bg-img/9.jpg" alt="">
-                            </div>
-                            <!-- Blog Content -->
-                            <div class="blog-content">
-                                <a href="#" class="post-tag">The Best</a>
-                                <a href="#" class="post-title">Friend eggs with ham</a>
-                                <div class="post-meta">
-                                    <a href="#" class="post-date">July 11, 2018</a>
-                                    <a href="#" class="post-author">By Julia Stiles</a>
-                                </div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc tristique justo id elit bibendum pharetra non vitae lectus. Mauris libero felis, dapibus a ultrices sed, commodo vitae odio. Sed auctor tellus quis arcu tempus.</p>
-                            </div>
-                        </div>
-
-                        <!-- Single Blog Post -->
-                        <div class="single-blog-post style-1 d-flex flex-wrap mb-30">
-                            <!-- Blog Thumbnail -->
-                            <div class="blog-thumbnail">
-                                <img src="img/bg-img/10.jpg" alt="">
-                            </div>
-                            <!-- Blog Content -->
-                            <div class="blog-content">
-                                <a href="#" class="post-tag">The Best</a>
-                                <a href="#" class="post-title">Mushrooms with pork chop</a>
-                                <div class="post-meta">
-                                    <a href="#" class="post-date">July 11, 2018</a>
-                                    <a href="#" class="post-author">By Julia Stiles</a>
-                                </div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc tristique justo id elit bibendum pharetra non vitae lectus. Mauris libero felis, dapibus a ultrices sed, commodo vitae odio. Sed auctor tellus quis arcu tempus.</p>
-                            </div>
-                        </div>
-
-                        <!-- Single Blog Post -->
-                        <div class="single-blog-post style-1 d-flex flex-wrap mb-30">
-                            <!-- Blog Thumbnail -->
-                            <div class="blog-thumbnail">
-                                <img src="img/bg-img/11.jpg" alt="">
-                            </div>
-                            <!-- Blog Content -->
-                            <div class="blog-content">
-                                <a href="#" class="post-tag">The Best</a>
-                                <a href="#" class="post-title">Birthday cake with chocolate</a>
-                                <div class="post-meta">
-                                    <a href="#" class="post-date">July 11, 2018</a>
-                                    <a href="#" class="post-author">By Julia Stiles</a>
-                                </div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc tristique justo id elit bibendum pharetra non vitae lectus. Mauris libero felis, dapibus a ultrices sed, commodo vitae odio. Sed auctor tellus quis arcu tempus.</p>
-                            </div>
-                        </div>
-                    </div>
+                <div style="text-align: right">
+                    <a th:href="@{/menuDetailList/{category}/{storeId}/1(category=${cate.category}, storeId=${cate.store_id})}">더 많은 상품 보기>></a>
                 </div>
             </div>
         </div>
-        </div>
 
-        <div class="bueno-search-area bg-img" style="background-image: url(img/core-img/pattern.png); padding:10px 0; font-size: 20px; font-weight: bold;">
-            <div style="text-align: center;">
-                <span>Others</span>
-            </div>
-        </div>
-
-        <div class="catagory-post-area section-padding-100" style="padding-top:10px;">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <!-- Post Area -->
-                    <div class="col-12 col-lg-8 col-xl-9">
-                        <!-- Sidebar Area -->
-                        <div class="col-12 col-sm-9 col-md-6 col-lg-4 col-xl-3">
-                            <div class="sidebar-area">
-
-                                <!-- Single Widget Area -->
-                                <div class="single-widget-area post-widget mb-30">
-                                    <!-- Single Post Area -->
-                                    <div class="single-post-area d-flex">
-                                        <!-- Blog Thumbnail -->
-                                        <div class="blog-thumbnail">
-                                            <img src="img/bg-img/12.jpg" alt="">
-                                        </div>
-                                        <!-- Blog Content -->
-                                        <div class="blog-content">
-                                            <a href="#" class="post-title">Friend eggs with ham</a>
-                                            <div class="post-meta">
-                                                <a href="#" class="post-date">July 11, 2018</a>
-                                                <a href="#" class="post-author">By Julia Stiles</a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Single Post Area -->
-                                    <div class="single-post-area d-flex">
-                                        <!-- Blog Thumbnail -->
-                                        <div class="blog-thumbnail">
-                                            <img src="img/bg-img/13.jpg" alt="">
-                                        </div>
-                                        <!-- Blog Content -->
-                                        <div class="blog-content">
-                                            <a href="#" class="post-title">Burger with fries</a>
-                                            <div class="post-meta">
-                                                <a href="#" class="post-date">July 11, 2018</a>
-                                                <a href="#" class="post-author">By Julia Stiles</a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Single Post Area -->
-                                    <div class="single-post-area d-flex">
-                                        <!-- Blog Thumbnail -->
-                                        <div class="blog-thumbnail">
-                                            <img src="img/bg-img/14.jpg" alt="">
-                                        </div>
-                                        <!-- Blog Content -->
-                                        <div class="blog-content">
-                                            <a href="#" class="post-title">Avocado &amp; Oisters</a>
-                                            <div class="post-meta">
-                                                <a href="#" class="post-date">July 11, 2018</a>
-                                                <a href="#" class="post-author">By Julia Stiles</a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Single Post Area -->
-                                    <div class="single-post-area d-flex">
-                                        <!-- Blog Thumbnail -->
-                                        <div class="blog-thumbnail">
-                                            <img src="img/bg-img/15.jpg" alt="">
-                                        </div>
-                                        <!-- Blog Content -->
-                                        <div class="blog-content">
-                                            <a href="#" class="post-title">Tortilla prawns</a>
-                                            <div class="post-meta">
-                                                <a href="#" class="post-date">July 11, 2018</a>
-                                                <a href="#" class="post-author">By Julia Stiles</a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Single Post Area -->
-                                    <div class="single-post-area d-flex">
-                                        <!-- Blog Thumbnail -->
-                                        <div class="blog-thumbnail">
-                                            <img src="img/bg-img/16.jpg" alt="">
-                                        </div>
-                                        <!-- Blog Content -->
-                                        <div class="blog-content">
-                                            <a href="#" class="post-title">Burger with fries</a>
-                                            <div class="post-meta">
-                                                <a href="#" class="post-date">July 11, 2018</a>
-                                                <a href="#" class="post-author">By Julia Stiles</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- ##### Catagory Post Area End ##### -->
 
@@ -484,80 +129,180 @@
             <div class="instagram-feed-area d-flex flex-wrap">
                 <!-- Single Instagram -->
                 <div class="single-instagram">
-                    <img src="img/bg-img/insta1.jpg" alt="">
+                    <img src="/display?fileName=img/bg-img/insta1.jpg" alt="">
                     <!-- Image Zoom -->
-                    <a href="img/bg-img/insta1.jpg" class="img-zoom" title="Instagram Image">+</a>
+                    <a href="/display?fileName=img/bg-img/insta1.jpg" class="img-zoom" title="Instagram Image">+</a>
                 </div>
 
                 <!-- Single Instagram -->
                 <div class="single-instagram">
-                    <img src="img/bg-img/insta2.jpg" alt="">
+                    <img src="/display?fileName=img/bg-img/insta2.jpg" alt="">
                     <!-- Image Zoom -->
-                    <a href="img/bg-img/insta2.jpg" class="img-zoom" title="Instagram Image">+</a>
+                    <a href="/display?fileName=img/bg-img/insta2.jpg" class="img-zoom" title="Instagram Image">+</a>
                 </div>
 
                 <!-- Single Instagram -->
                 <div class="single-instagram">
-                    <img src="img/bg-img/insta3.jpg" alt="">
+                    <img src="/display?fileName=img/bg-img/insta3.jpg" alt="">
                     <!-- Image Zoom -->
-                    <a href="img/bg-img/insta3.jpg" class="img-zoom" title="Instagram Image">+</a>
+                    <a href="/display?fileName=img/bg-img/insta3.jpg" class="img-zoom" title="Instagram Image">+</a>
                 </div>
 
                 <!-- Single Instagram -->
                 <div class="single-instagram">
-                    <img src="img/bg-img/insta4.jpg" alt="">
+                    <img src="/display?fileName=img/bg-img/insta4.jpg" alt="">
                     <!-- Image Zoom -->
-                    <a href="img/bg-img/insta4.jpg" class="img-zoom" title="Instagram Image">+</a>
+                    <a href="/display?fileName=img/bg-img/insta4.jpg" class="img-zoom" title="Instagram Image">+</a>
                 </div>
 
                 <!-- Single Instagram -->
                 <div class="single-instagram">
-                    <img src="img/bg-img/insta5.jpg" alt="">
+                    <img src="/display?fileName=img/bg-img/insta5.jpg" alt="">
                     <!-- Image Zoom -->
-                    <a href="img/bg-img/insta5.jpg" class="img-zoom" title="Instagram Image">+</a>
+                    <a href="/display?fileName=img/bg-img/insta5.jpg" class="img-zoom" title="Instagram Image">+</a>
                 </div>
 
                 <!-- Single Instagram -->
                 <div class="single-instagram">
-                    <img src="img/bg-img/insta6.jpg" alt="">
+                    <img src="/display?fileName=img/bg-img/insta6.jpg" alt="">
                     <!-- Image Zoom -->
-                    <a href="img/bg-img/insta6.jpg" class="img-zoom" title="Instagram Image">+</a>
+                    <a href="/display?fileName=img/bg-img/insta6.jpg" class="img-zoom" title="Instagram Image">+</a>
                 </div>
 
                 <!-- Single Instagram -->
                 <div class="single-instagram">
-                    <img src="img/bg-img/insta7.jpg" alt="">
+                    <img src="/display?fileName=img/bg-img/insta7.jpg" alt="">
                     <!-- Image Zoom -->
-                    <a href="img/bg-img/insta7.jpg" class="img-zoom" title="Instagram Image">+</a>
+                    <a href="/display?fileName=img/bg-img/insta7.jpg" class="img-zoom" title="Instagram Image">+</a>
                 </div>
 
                 <!-- Single Instagram -->
                 <div class="single-instagram">
-                    <img src="img/bg-img/insta8.jpg" alt="">
+                    <img src="/display?fileName=img/bg-img/insta8.jpg" alt="">
                     <!-- Image Zoom -->
-                    <a href="img/bg-img/insta8.jpg" class="img-zoom" title="Instagram Image">+</a>
+                    <a href="/display?fileName=img/bg-img/insta8.jpg" class="img-zoom" title="Instagram Image">+</a>
                 </div>
 
                 <!-- Single Instagram -->
                 <div class="single-instagram">
-                    <img src="img/bg-img/insta9.jpg" alt="">
+                    <img src="/display?fileName=img/bg-img/insta9.jpg" alt="">
                     <!-- Image Zoom -->
-                    <a href="img/bg-img/insta9.jpg" class="img-zoom" title="Instagram Image">+</a>
+                    <a href="/display?fileName=img/bg-img/insta9.jpg" class="img-zoom" title="Instagram Image">+</a>
                 </div>
 
                 <!-- Single Instagram -->
                 <div class="single-instagram">
-                    <img src="img/bg-img/insta10.jpg" alt="">
+                    <img src="/display?fileName=img/bg-img/insta10.jpg" alt="">
                     <!-- Image Zoom -->
-                    <a href="img/bg-img/insta10.jpg" class="img-zoom" title="Instagram Image">+</a>
+                    <a href="/display?fileName=img/bg-img/insta10.jpg" class="img-zoom" title="Instagram Image">+</a>
                 </div>
             </div>
             <!-- ##### Instagram Area End ##### -->
+        </div>
     </main>
 
     <th:block th:replace="/layout/footer.html :: footer"></th:block>
 
+    <script>
+        let bucketPrice=0;
+        let cart=[];
 
+        function addBucket(menu){
+            console.log(menu);
+
+            let menuInfo = {product: menu, product_name: menu.product_name, qty: 1};
+
+            console.log('for문 전');
+
+            if(checkMenu(menu)===false){
+                addBuckHtml();
+                addTotalPrice();
+            }else{
+                cart.push(menuInfo);
+                addBuckHtml();
+                addTotalPrice();
+            }
+
+        }
+
+        function addTotalPrice(){
+            const totalPrice = document.getElementById('totalPrice');
+            totalPrice.innerHTML = calculatePrice().toLocaleString();
+        }
+
+        function checkMenu(menu){
+            let idx=0;
+
+            for(let i = 0 ; i<cart.length ; i++){
+                if(cart[i].product_name === menu.product_name){
+                    cart[i].qty++;
+                    return false;
+                }
+                idx++;
+            }
+
+            return idx;
+        }
+
+        function addBuckHtml(){
+            let bucket = document.getElementById('Bucket').innerHTML;
+            let addedHtml = "";
+            for(list of cart){
+            addedHtml += '                <div class="single-blog-post style-1 d-flex flex-wrap mb-30" >' +
+                '                    <!-- Blog Thumbnail -->' +
+                '                    <div class="blog-thumbnail">' +
+                '                        <img src="/display?fileName='+list.product.img+'" style="height: 80%" alt="">' +
+                '                    </div>' +
+                '                    <!-- Blog Content -->' +
+                '                    <div class="blog-content">' +
+                '                        <a href="#" class="post-tag">'+list.product.category+'</a>' +
+                '                        <a href="#" class="post-title" name="product_name">'+list.product.product_name+'</a>' +
+                '                        <div class="post-meta">' +
+                '                            <a href="#" class="post-date">'+list.product.price+'</a>' +
+                '                            <a href="#" class="post-author">' +
+                '                                <div>' +
+                '                                    <input type="button" value="-" style="height: 18px; width:13px; border:none;" onclick="calculateBtn(1,\''+list.product_name+'\')">' +
+                '                                    <input type="text" name="itemAmount" value="'+list.qty+'" style="width:20%; height: 18px; border:none;">' +
+                '                                    <input type="button" value="+" style="height: 18px; width:13px; border:none;" onclick="calculateBtn(2,\''+list.product_name+'\')">' +
+                '                                </div>' +
+                '                            </a>' +
+                '                        </div>' +
+                '                    </div>' +
+                '                </div>'
+            }
+
+            document.getElementById('Bucket').innerHTML=addedHtml;
+        }
+
+        function calculateBtn(seperators,productName){
+            if(seperators===1){
+                for(let i = 0 ; i<cart.length ; i++){
+                    if(cart[i].product_name === productName){
+                        cart[i].qty--;
+                        addBuckHtml();
+                        addTotalPrice();
+                    }
+                }
+            }else{
+                for(let i = 0 ; i<cart.length ; i++){
+                    if(cart[i].product_name === productName){
+                        cart[i].qty++;
+                        addBuckHtml();
+                        addTotalPrice();
+                    }
+                }
+            }
+
+        }
+
+        function calculatePrice(){
+            let bucketTotalPrice = 0;
+            for(let i = 0 ; i < cart.length ; i++){
+                bucketTotalPrice += cart[i].product.price * cart[i].qty;
+            }
+            return bucketTotalPrice;
+        }
+    </script>
     <!-- Popper js -->
     <script th:src="@{/js/bootstrap/popper.min.js}"></script>
     <!-- Bootstrap js -->

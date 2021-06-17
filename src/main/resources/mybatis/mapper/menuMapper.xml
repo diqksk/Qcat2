@@ -4,20 +4,45 @@
 
 <mapper namespace="com.Qcat.Qcat.market.repository.MenuMapper">
 
+    <resultMap type="com.Qcat.Qcat.market.dto.MenuDto" id="dtoBase">
+        <id column="product_id" property="product_id"/>
+        <result column="store_id" property="store_id"/>
+        <result column="category" property="category"/>
+        <result column="product_name" property="product_name"/>
+        <result column="content" property="content"/>
+        <result column="price" property="price"/>
+        <result column="img" property="img"/>
+        <result column="product_regdate" property="product_regdate"/>
+    </resultMap>
+
     <insert id="insertMenu" parameterType="com.Qcat.Qcat.market.dto.MenuDto">
         INSERT INTO product(store_id, category, product_name, content, price, img)
         VALUES(#{store_id},#{category},#{product_name},#{content},#{price},#{img})
     </insert>
 
-    <select id="getMenus" parameterType="com.Qcat.Qcat.market.dto.MenuDto" resultType="com.Qcat.Qcat.market.dto.MenuDto">
-        SELECT * FROM product WHERE store_id = #{store_id}
+    <select id="getMenus" parameterType="int" resultMap="dtoBase">
+        <![CDATA[
+        select * from
+        (
+        select product_id, store_id,content ,img, product_regdate , product_name, category, price, (@num:=if(@group = `category`, @num +1, if(@group := `category`, 1, 1))) rnum
+        from product p
+        CROSS JOIN (select @num:=0, @category:=null) c
+        where p.store_id = 1
+        order by category, product_id desc
+        ) as temp
+        where temp.rnum <= 5
+        ]]>
     </select>
 
-    <select id="getCatMenu" parameterType="com.Qcat.Qcat.market.dto.MenuDto" resultType="com.Qcat.Qcat.market.dto.MenuDto">
+    <select id="getCatMenu" parameterType="com.Qcat.Qcat.market.dto.MenuDto" resultMap="dtoBase">
         SELECT * FROM product WHERE store_id = #{store_id} AND category = #{category}
     </select>
 
-    <select id="getPaging" resultType="com.Qcat.Qcat.market.dto.MenuDto">
+    <select id="getPaging" resultMap="dtoBase">
         select * from product WHERE store_id = #{dto.store_id} AND category = #{dto.category}  LIMIT #{cri.amount} OFFSET #{cri.offset}
+    </select>
+
+    <select id="getCategoryCount" parameterType="int" resultType="java.util.HashMap">
+        SELECT * FROM product WHERE store_id= #{store_id} GROUP BY category;
     </select>
 </mapper>

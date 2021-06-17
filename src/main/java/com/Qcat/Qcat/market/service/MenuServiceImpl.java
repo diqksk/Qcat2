@@ -6,6 +6,8 @@ import com.Qcat.Qcat.market.repository.MenuMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -20,9 +22,11 @@ public class MenuServiceImpl implements MenuService{
     }
 
     @Override
-    public List<MenuDto> getMenus(MenuDto dto) {
-        return menuMapper.getMenus(dto);
+    public List<MenuDto> getMenus(int store_id) {
+        List<MenuDto> dto = menuMapper.getMenus(store_id);
+        return menuMapper.getMenus(store_id);
     }
+
 
     @Override
     public List<MenuDto> getCatMenu(MenuDto dto) {
@@ -33,4 +37,10 @@ public class MenuServiceImpl implements MenuService{
     public List<MenuDto> getPaging(MenuDto dto, Criteria cri) {
         return menuMapper.getPaging(dto,cri);
     }
+
+    @Override
+    public List<HashMap<String, Object>> getCategoryCount(int store_id) {
+        return menuMapper.getCategoryCount(store_id);
+    }
+
 }
