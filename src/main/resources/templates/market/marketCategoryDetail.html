@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="">
@@ -15,7 +15,21 @@
     <!-- ##### All Javascript Script ##### -->
     <!-- jQuery-2.2.4 js -->
     <script th:src="@{/js/jquery/jquery-2.2.4.min.js}"></script>
-
+    <style>
+        #treadingPost{
+            -ms-overflow-style: none; /* IE and Edge */
+            overflow: auto;
+        }
+        #treadingPost::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera*/
+            overflow: auto;
+        }
+        .oneItem:hover{
+            transition: all 0.3s;
+            background: #dadfe5;
+            cursor: pointer;
+        }
+    </style>
 
     <title>Title</title>
 </head>
@@ -32,27 +46,31 @@
             <h4>Treading Post</h4>
 
             <!-- Single Blog Post -->
-            <div class="single-blog-post style-1 d-flex flex-wrap mb-30" th:each="menu : ${menuList}">
-                <!-- Blog Thumbnail -->
-                <div class="blog-thumbnail">
-                    <img src="/display?fileName=img/bg-img/9.jpg" alt="">
-                </div>
-                <!-- Blog Content -->
-                <div class="blog-content">
-                    <a href="#" class="post-tag">The Best</a>
-                    <a href="#" class="post-title">Friend eggs with ham</a>
-                    <div class="post-meta">
-                        <a href="#" class="post-date">5,000</a>
-                        <a href="#" class="post-author">
+            <div id="Bucket">
+                <!-- 새로 추가한 이미지들이 올라가는곳-->
+            </div>
+
+            <div id="priceArea">
+                <div style="height: 50px; ">
+                    <div style="border-bottom:1px solid rgb(235, 235, 235);">
+                        <div style="margin-bottom: 10px;" id="priceItem">
                             <div>
-                                <input type="button" value="+" style="height: 18px; width:13px; border:none;">
-                                <input type="text" value="0" style="width:20%; height: 18px; border:none;">
-                                <input type="button" value="-" style="height: 18px; width:13px; border:none;">
+                                <div style="width: 70%; font-size:14px; padding:0; margin:0; font-weight: 400;">
+                                    <span>mushrooms</span>
+                                </div>
+                                <div style="padding:0; margin:0; font-size:10px;">
+                                    <span>5000 x 5 = 25000</span>
+                                </div>
                             </div>
-                        </a>
+                        </div>
+                        <div style="padding:13px 0 0 0; margin:0 0 20px 0; font-size:14px; font-weight: 600; display: flex; justify-content: space-between; align-items: baseline;">
+                            <div><span>Price:</span><span id="totalPrice">0</span>₩</div>
+                            <input type="button" value="Buy" style="border:none; background:rgb(190,210,210); border-radius:20px; padding:5px 10px;">
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
 
             <!-- Single Blog Post -->
             <div class="single-blog-post style-1 d-flex flex-wrap mb-30">
@@ -61,123 +79,10 @@
                     <img src="/display?fileName=img/bg-img/10.jpg" alt="">
                 </div>
                 <!-- Blog Content -->
-                <div class="blog-content">
-                    <a href="#" class="post-tag">The Best</a>
-                    <a href="#" class="post-title">Mushrooms with pork chop</a>
-                    <div class="post-meta">
-                        <a href="#" class="post-date">6,000</a>
-                        <a href="#" class="post-author">
-                            <div>
-                                <input type="button" value="+" style="height: 18px; width:13px; border:none;">
-                                <input type="text" value="0" style="width:20%; height: 18px; border:none;">
-                                <input type="button" value="-" style="height: 18px; width:13px; border:none;">
-                            </div>
-                        </a>
-                    </div>
-                </div>
             </div>
-
-            <!-- Single Blog Post -->
-            <div class="single-blog-post style-1 d-flex flex-wrap mb-30">
-                <!-- Blog Thumbnail -->
-                <div class="blog-thumbnail">
-                    <img src="/display?fileName=img/bg-img/11.jpg" alt="">
-                </div>
-                <!-- Blog Content -->
-                <div class="blog-content">
-                    <a href="#" class="post-tag">The Best</a>
-                    <a href="#" class="post-title">Birthday cake with chocolate</a>
-                    <div class="post-meta">
-                        <a href="#" class="post-date">25,000</a>
-                        <a href="#" class="post-author">
-                            <div>
-                                <input type="button" value="+" style="height: 18px; width:13px; border:none;">
-                                <input type="text" value="0" style="width:20%; height: 18px; border:none;">
-                                <input type="button" value="-" style="height: 18px; width:13px; border:none;">
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Single Blog Post -->
-            <div class="single-blog-post style-1 d-flex flex-wrap mb-30">
-                <!-- Blog Thumbnail -->
-                <div class="blog-thumbnail">
-                    <img src="/display?fileName=img/bg-img/9.jpg" alt="">
-                </div>
-                <!-- Blog Content -->
-                <div class="blog-content">
-                    <a href="#" class="post-tag">The Best</a>
-                    <a href="#" class="post-title">Friend eggs with ham</a>
-                    <div class="post-meta">
-                        <a href="#" class="post-date">11,000</a>
-                        <a href="#" class="post-author">
-                            <div>
-                                <input type="button" value="+" style="height: 18px; width:13px; border:none;">
-                                <input type="text" value="0" style="width:20%; height: 18px; border:none;">
-                                <input type="button" value="-" style="height: 18px; width:13px; border:none;">
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Single Blog Post -->
-            <div class="single-blog-post style-1 d-flex flex-wrap mb-30">
-                <!-- Blog Thumbnail -->
-                <div class="blog-thumbnail">
-                    <img src="/display?fileName=img/bg-img/10.jpg" alt="">
-                </div>
-                <!-- Blog Content -->
-                <div class="blog-content">
-                    <a href="#" class="post-tag">The Best</a>
-                    <a href="#" class="post-title">Mushrooms with pork chop</a>
-                    <div class="post-meta">
-                        <a href="#" class="post-date">23,000</a>
-                        <a href="#" class="post-author">
-                            <div>
-                                <input type="button" value="+" style="height: 18px; width:13px; border:none;">
-                                <input type="text" value="0" style="width:20%; height: 18px; border:none;">
-                                <input type="button" value="-" style="height: 18px; width:13px; border:none;">
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Single Blog Post -->
-            <div class="single-blog-post style-1 d-flex flex-wrap mb-30">
-                <!-- Blog Thumbnail -->
-                <div class="blog-thumbnail">
-                    <img src="/display?fileName=img/bg-img/11.jpg" alt="">
-                </div>
-                <!-- Blog Content -->
-                <div class="blog-content">
-                    <a href="#" class="post-tag">The Best</a>
-                    <a href="#" class="post-title">Birthday cake with chocolate</a>
-                    <div class="post-meta">
-                        <a href="#" class="post-date">7,300</a>
-                        <a href="#" class="post-author">
-                            <div>
-                                <input type="button" value="+" style="height: 18px; width:13px; border:none;">
-                                <input type="text" value="0" style="width:20%; height: 18px; border:none;">
-                                <input type="button" value="-" style="height: 18px; width:13px; border:none;">
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
         </div>
         <!-- ##### Treading Post Area End ##### -->
 
-        <!-- ##### Search Area Start ##### -->
-        <div class="bueno-search-area bg-img" style="background-image: url(img/core-img/pattern.png); padding:10px 0; font-size: 20px; font-weight: bold;">
-            <div style="text-align: center;">
-                <span>Best menu</span>
-            </div>
-        </div>
         <div style="text-align: right; padding-right: 20px;">
             <span>후기 보기 >></span>
         </div>
@@ -190,8 +95,9 @@
                     <!-- Post Area -->
                     <div class="col-12 col-lg-8 col-xl-9">
                         <!-- Single Blog Post -->
-                        <div class="single-blog-post style-1 d-flex flex-wrap mb-30" th:each="menu : ${menuList}">
+                        <div class="single-blog-post style-1 d-flex flex-wrap mb-30 oneItem" th:each="menu : ${menuList}" th:onclick="addBucket([[${menu}]])">
                             <!-- Blog Thumbnail -->
+                            <input type="hidden" th:value="${menu.category}" class="categories">
                             <div class="blog-thumbnail">
                                 <img th:src="|/display?fileName=${menu.img}|" alt="">
                             </div>
@@ -294,6 +200,120 @@
 
     <th:block th:replace="/layout/footer.html :: footer"></th:block>
 
+    <script>
+        let cart=[];
+
+        addCartSession();
+
+        function addCartSession(){
+            if(sessionStorage.getItem('cart')){
+                let tempCart = JSON.parse(sessionStorage.getItem('cart'));
+                for(let i = 0; i < tempCart.length ; i++){
+                    cart.push(tempCart[i]);
+                }
+                addBuckHtml();
+                addTotalPrice();
+            }
+        }
+
+
+
+        function addBucket(menu){
+            console.log(menu);
+
+            let menuInfo = {product: menu, product_name: menu.product_name, qty: 1};
+
+            console.log('for문 전');
+
+            if(checkMenu(menu)===false){
+                addBuckHtml();
+                addTotalPrice();
+            }else{
+                cart.push(menuInfo);
+                addBuckHtml();
+                addTotalPrice();
+            }
+
+        }
+
+        function addTotalPrice(){
+            const totalPrice = document.getElementById('totalPrice');
+            totalPrice.innerHTML = calculatePrice().toLocaleString();
+        }
+
+        function checkMenu(menu){
+            let idx=0;
+
+            for(let i = 0 ; i<cart.length ; i++){
+                if(cart[i].product_name === menu.product_name){
+                    cart[i].qty++;
+                    return false;
+                }
+                idx++;
+            }
+
+            return idx;
+        }
+
+        function addBuckHtml(){
+            let bucket = document.getElementById('Bucket').innerHTML;
+            let addedHtml = "";
+            for(list of cart){
+                addedHtml += '                <div class="single-blog-post style-1 d-flex flex-wrap mb-30" >' +
+                    '                    <!-- Blog Thumbnail -->' +
+                    '                    <div class="blog-thumbnail">' +
+                    '                        <img src="/display?fileName='+list.product.img+'" style="height: 80%" alt="">' +
+                    '                    </div>' +
+                    '                    <!-- Blog Content -->' +
+                    '                    <div class="blog-content">' +
+                    '                        <a href="#" class="post-tag">'+list.product.category+'</a>' +
+                    '                        <a href="#" class="post-title" name="product_name">'+list.product.product_name+'</a>' +
+                    '                        <div class="post-meta">' +
+                    '                            <a href="#" class="post-date">'+list.product.price+'</a>' +
+                    '                            <a href="#" class="post-author">' +
+                    '                                <div>' +
+                    '                                    <input type="button" value="-" style="height: 18px; width:13px; border:none;" onclick="calculateBtn(1,\''+list.product_name+'\')">' +
+                    '                                    <input type="text" name="itemAmount" value="'+list.qty+'" style="width:20%; height: 18px; border:none;">' +
+                    '                                    <input type="button" value="+" style="height: 18px; width:13px; border:none;" onclick="calculateBtn(2,\''+list.product_name+'\')">' +
+                    '                                </div>' +
+                    '                            </a>' +
+                    '                        </div>' +
+                    '                    </div>' +
+                    '                </div>'
+            }
+            sessionStorage.setItem('cart', JSON.stringify(cart));
+            document.getElementById('Bucket').innerHTML=addedHtml;
+        }
+
+        function calculateBtn(seperators,productName){
+            if(seperators===1){
+                for(let i = 0 ; i<cart.length ; i++){
+                    if(cart[i].product_name === productName){
+                        cart[i].qty--;
+                        addBuckHtml();
+                        addTotalPrice();
+                    }
+                }
+            }else{
+                for(let i = 0 ; i<cart.length ; i++){
+                    if(cart[i].product_name === productName){
+                        cart[i].qty++;
+                        addBuckHtml();
+                        addTotalPrice();
+                    }
+                }
+            }
+
+        }
+
+        function calculatePrice(){
+            let bucketTotalPrice = 0;
+            for(let i = 0 ; i < cart.length ; i++){
+                bucketTotalPrice += cart[i].product.price * cart[i].qty;
+            }
+            return bucketTotalPrice;
+        }
+    </script>
 
     <!-- Popper js -->
     <script th:src="@{/js/bootstrap/popper.min.js}"></script>

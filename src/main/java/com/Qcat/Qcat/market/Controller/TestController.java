@@ -9,6 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Controller
 public class TestController {
 
@@ -30,7 +34,7 @@ public class TestController {
     }
 
     @GetMapping("/menuList/{store_id}")
-    public String getMenuLit(@PathVariable("store_id") int store_id, Model model){
+    public String getMenuList(@PathVariable("store_id") int store_id, Model model){
 
         System.out.println(store_id);
         model.addAttribute("menuList",menuService.getMenus(store_id));
@@ -39,12 +43,14 @@ public class TestController {
     }
 
     @GetMapping("/menuDetailList/{category}/{store_id}/{page}")
-    public String getMenuLit(@PathVariable("store_id") int store_id
-            ,@PathVariable("category") String category
-                             ,@PathVariable("page") int page
-                             ,Model model){
+    public String getMenuDetailList(@PathVariable("store_id") int store_id
+            , @PathVariable("category") String category
+            , @PathVariable("page") int page
+            , Model model
+    ) {
 
-        System.out.println(store_id);
+
+
         MenuDto dto = new MenuDto();
         dto.setStore_id(store_id);
         dto.setCategory(category);
@@ -52,11 +58,11 @@ public class TestController {
         int amount = 5;
 
 
-        Criteria cri = new Criteria(page,amount);
-        int total=(int)Math.ceil(menuService.getCatMenu(dto).size()*1.0/amount);
-        System.out.println(total+"토탈탈탈");
-        
-        model.addAttribute("menuList",menuService.getPaging(dto,cri));
+        Criteria cri = new Criteria(page, amount);
+        int total = (int) Math.ceil(menuService.getCatMenu(dto).size() * 1.0 / amount);
+
+
+        model.addAttribute("menuList", menuService.getPaging(dto, cri));
         model.addAttribute("total", total);
 
         return "/market/marketCategoryDetail";

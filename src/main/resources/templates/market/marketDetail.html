@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="">
@@ -65,7 +65,7 @@
                             </div>
                         </div>
                         <div style="padding:13px 0 0 0; margin:0 0 20px 0; font-size:14px; font-weight: 600; display: flex; justify-content: space-between; align-items: baseline;">
-                            <div><span>Price:</span><span id="totalPrice">100,000</span>₩</div>
+                            <div><span>Price:</span><span id="totalPrice">0</span>₩</div>
                             <input type="button" value="Buy" style="border:none; background:rgb(190,210,210); border-radius:20px; padding:5px 10px;">
                         </div>
                     </div>
@@ -115,9 +115,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
                 <div style="text-align: right">
-                    <a th:href="@{/menuDetailList/{category}/{storeId}/1(category=${cate.category}, storeId=${cate.store_id})}">더 많은 상품 보기>></a>
+                    <a href="#" th:onclick="createSession([[${cate.category}]],[[${cate.store_id}]])">더 많은 상품보기>></a>
+                </div>
                 </div>
             </div>
         </div>
@@ -204,8 +204,29 @@
     <th:block th:replace="/layout/footer.html :: footer"></th:block>
 
     <script>
-        let bucketPrice=0;
         let cart=[];
+
+        addCartSession();
+
+        function addCartSession(){
+            if(sessionStorage.getItem('cart')){
+                let tempCart = JSON.parse(sessionStorage.getItem('cart'));
+                for(let i = 0; i < tempCart.length ; i++){
+                    cart.push(tempCart[i]);
+                }
+                addBuckHtml();
+                addTotalPrice();
+            }
+        }
+
+
+        function createSession(category,store_id){
+            sessionStorage.setItem('cart', JSON.stringify(cart));
+            let url = '/menuDetailList/' + category + '/' + store_id + '/1';
+            location.href=url;
+        }
+
+
 
         function addBucket(menu){
             console.log(menu);
@@ -270,7 +291,7 @@
                 '                    </div>' +
                 '                </div>'
             }
-
+            sessionStorage.setItem('cart', JSON.stringify(cart));
             document.getElementById('Bucket').innerHTML=addedHtml;
         }
 
