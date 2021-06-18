@@ -30,6 +30,15 @@
             background: #dadfe5;
             cursor: pointer;
         }
+        .modals{
+            position:absolute;
+            width:100%;
+            height:100%;
+            background: rgba(0,0,0,0.8);
+            top:0;
+            left:0;
+            display:none;
+        }
     </style>
 
     <title>Title</title>
@@ -66,7 +75,7 @@
                         </div>
                         <div style="padding:13px 0 0 0; margin:0 0 20px 0; font-size:14px; font-weight: 600; display: flex; justify-content: space-between; align-items: baseline;">
                             <div><span>Price:</span><span id="totalPrice">0</span>₩</div>
-                            <input type="button" value="Buy" style="border:none; background:rgb(190,210,210); border-radius:20px; padding:5px 10px;">
+                            <input type="button" value="Buy" style="border:none; background:rgb(190,210,210); border-radius:20px; padding:5px 10px;" onclick="sendMsg()">
                         </div>
                     </div>
                 </div>
@@ -201,6 +210,13 @@
         </div>
     </main>
 
+    <input type="text" placeholder="보낼 메세지를 입력하세요" class="content">
+    <input type="button" value="전송" class="sendBtn" onclick="sendMsg()">
+    <div>
+        <span>메세지</span>
+        <div class="msgArea"></div>
+    </div>
+
     <th:block th:replace="/layout/footer.html :: footer"></th:block>
 
     <script>
@@ -265,6 +281,7 @@
             return idx;
         }
 
+
         function addBuckHtml(){
             let bucket = document.getElementById('Bucket').innerHTML;
             let addedHtml = "";
@@ -299,7 +316,17 @@
             if(seperators===1){
                 for(let i = 0 ; i<cart.length ; i++){
                     if(cart[i].product_name === productName){
+                        if(cart[i].qty===1){
+                            console.log(cart);
+                            cart.splice(i,1);
+
+                            console.log('누른 후');
+                            console.log(cart);
+
+
+                        }else{
                         cart[i].qty--;
+                        }
                         addBuckHtml();
                         addTotalPrice();
                     }
@@ -323,7 +350,39 @@
             }
             return bucketTotalPrice;
         }
+
     </script>
+
+    <script>
+
+
+        let socket = new WebSocket("ws://localhost:8080/websocket");
+
+        socket.onopen = (e) => {
+            console.log("open server");
+        };
+
+        socket.onerror = (e) => {
+            console.log(e);
+        };
+
+        socket.onmessage=(e)=>{
+            alert(e.data);
+
+        }
+
+
+        function sendMsg(){
+            $.get('/getOrderNum', (orderNum) => {
+                cart.push(orderNum);
+                console.log(cart);
+                socket.send(JSON.stringify(cart));
+                cart.pop();
+            });
+        }
+
+    </script>
+
     <!-- Popper js -->
     <script th:src="@{/js/bootstrap/popper.min.js}"></script>
     <!-- Bootstrap js -->

@@ -65,22 +65,13 @@
                         </div>
                         <div style="padding:13px 0 0 0; margin:0 0 20px 0; font-size:14px; font-weight: 600; display: flex; justify-content: space-between; align-items: baseline;">
                             <div><span>Price:</span><span id="totalPrice">0</span>₩</div>
-                            <input type="button" value="Buy" style="border:none; background:rgb(190,210,210); border-radius:20px; padding:5px 10px;">
+                            <input type="button" value="Buy" onclick="sendMsg()" style="border:none; background:rgb(190,210,210); border-radius:20px; padding:5px 10px;">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-            <!-- Single Blog Post -->
-            <div class="single-blog-post style-1 d-flex flex-wrap mb-30">
-                <!-- Blog Thumbnail -->
-                <div class="blog-thumbnail">
-                    <img src="/display?fileName=img/bg-img/10.jpg" alt="">
-                </div>
-                <!-- Blog Content -->
-            </div>
-        </div>
         <!-- ##### Treading Post Area End ##### -->
 
         <div style="text-align: right; padding-right: 20px;">
@@ -313,6 +304,28 @@
             }
             return bucketTotalPrice;
         }
+    </script>
+
+    <script>
+        let socket = new WebSocket("ws://localhost:8080/websocket");
+
+        socket.onopen = (e) => {
+            console.log("open server");
+        };
+
+        socket.onerror = (e) => {
+            console.log(e);
+        };
+
+        socket.onmessage=(e)=>{
+            alert(e.data);
+
+        }
+
+        function sendMsg(){
+            socket.send(JSON.stringify(cart));
+        }
+
     </script>
 
     <!-- Popper js -->

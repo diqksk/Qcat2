@@ -1,15 +1,11 @@
-package com.Qcat.Qcat.market.Controller;
+package com.Qcat.Qcat.market.controller;
 
 import com.Qcat.Qcat.market.dto.UploadResultDTO;
-import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;

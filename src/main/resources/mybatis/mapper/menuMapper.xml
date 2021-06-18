@@ -45,4 +45,6 @@
     <select id="getCategoryCount" parameterType="int" resultType="java.util.HashMap">
         SELECT * FROM product WHERE store_id= #{store_id} GROUP BY category;
     </select>
+
+
 </mapper>

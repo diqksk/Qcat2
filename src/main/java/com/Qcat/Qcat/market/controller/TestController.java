@@ -1,17 +1,12 @@
-package com.Qcat.Qcat.market.Controller;
+package com.Qcat.Qcat.market.controller;
 
 import com.Qcat.Qcat.market.domain.Criteria;
 import com.Qcat.Qcat.market.dto.MenuDto;
-import com.Qcat.Qcat.market.dto.PageDTO;
 import com.Qcat.Qcat.market.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 public class TestController {
@@ -39,6 +34,7 @@ public class TestController {
         System.out.println(store_id);
         model.addAttribute("menuList",menuService.getMenus(store_id));
         model.addAttribute("categories",menuService.getCategoryCount(store_id));
+        model.addAttribute("store_id", store_id);
         return "/market/marketDetail";
     }
 
@@ -64,6 +60,7 @@ public class TestController {
 
         model.addAttribute("menuList", menuService.getPaging(dto, cri));
         model.addAttribute("total", total);
+        model.addAttribute("store_id", store_id);
 
         return "/market/marketCategoryDetail";
     }
