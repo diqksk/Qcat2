@@ -45,7 +45,7 @@
         <div class="container">
             <div>
                 <h2>상품등록</h2>
-                <form th:action="@{/insertMenu}" th:method="POST">
+                <form th:action="@{/admin/insertMenu}" th:method="POST">
                     <div style="display:flex; padding:20px;">
                         <div>
                             <div class="uploadResult" >
@@ -131,7 +131,7 @@
                 }
 
                 $.ajax({
-                    url: '/uploadAjax',
+                    url: '/admin/uploadAjax',
                     processData: false,
                     contentType: false,
                     data: formData,
@@ -177,7 +177,7 @@
                 let targetLi = $(this).closest("li");
 
                 $.ajax({
-                    url: 'removeFile',
+                    url: '/admin/removeFile',
                     data: {fileName: targetFile},
                     dataType: 'text',
                     type: 'POST',

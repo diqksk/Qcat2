@@ -31,7 +31,7 @@ public class UploadController {
     @Value("${com.qcat.upload.path}")
     private String uploadPath;
 
-    @PostMapping("/uploadAjax")
+    @PostMapping("/admin/uploadAjax")
     public ResponseEntity<List<UploadResultDTO>> uploadFile(MultipartFile[] uploadFiles) { //ResponseEntity는 사용자의 httpRequest에 대한 응답 데이터를 포함(헤더,바디,스테이터스 포함)
 
         List<UploadResultDTO> resultDTOList = new ArrayList<>();
@@ -92,7 +92,7 @@ public class UploadController {
     }
 
 
-    @PostMapping("removeFile")
+    @PostMapping("/admin/removeFile")
     public ResponseEntity<Boolean> removeFile(String fileName) {
 
         String srcFileName = null;

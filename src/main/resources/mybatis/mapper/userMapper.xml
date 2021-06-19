@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.Qcat.Qcat.user.repository.UserMapper">
+
+    <select id="checkSignUp" resultType="Integer" parameterType="java.util.HashMap">
+        SELECT count(#{type}) FROM member WHERE ${type} = #{value}
+    </select>
+
+    <insert id="insertSignUp" parameterType="com.Qcat.Qcat.user.dto.UserDto">
+        INSERT INTO member(login_id,password, name, email, phone) VALUES(#{login_id},#{password},#{name},#{email},#{phone})
+    </insert>
+
+    <select id="checkLogin" resultType="Integer" parameterType="com.Qcat.Qcat.user.dto.UserDto">
+        SELECT count(*) FROM member WHERE login_id = #{login_id} AND password = #{password};
+    </select>
+
+    <select id="getStoreList" parameterType="java.util.HashMap">
+        SELECT * FROM s.store_id, s.member_id,s.store_name,s.market_tel, s.location, m.name WHERE s.member_id = m.member_id AND login_id=#{login_id};
+    </select>
+
+</mapper>

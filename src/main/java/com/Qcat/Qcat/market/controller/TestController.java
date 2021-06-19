@@ -14,13 +14,13 @@ public class TestController {
     @Autowired
     MenuService menuService;
 
-    @GetMapping("test")
-    public String test(){
-
+    @GetMapping("/admin/upload/{store_id}")
+    public String test(@PathVariable int store_id, Model model){
+        model.addAttribute("store_id", store_id);
         return "/market/register";
     }
 
-    @PostMapping("/insertMenu")
+    @PostMapping("/admin/insertMenu")
     public String insertMenu(MenuDto dto){
 
         System.out.println(menuService.insertMenu(dto));
@@ -28,7 +28,7 @@ public class TestController {
         return "/market/register";
     }
 
-    @GetMapping("/menuList/{store_id}")
+    @GetMapping("/market/menuList/{store_id}")
     public String getMenuList(@PathVariable("store_id") int store_id, Model model){
         System.out.println(store_id);
         model.addAttribute("menuList",menuService.getMenus(store_id));
@@ -39,7 +39,7 @@ public class TestController {
         return "/market/marketDetail";
     }
 
-    @GetMapping("/menuDetailList/{category}/{store_id}/{page}")
+    @GetMapping("/market/menuDetailList/{category}/{store_id}/{page}")
     public String getMenuDetailList(@PathVariable("store_id") int store_id
             , @PathVariable("category") String category
             , @PathVariable("page") int page

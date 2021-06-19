@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" th:href="@{/style.css}">
+
+    <link rel="icon" th:href="@{/img/core-img/favicon.ico}">
+
+
+
+    <!-- ##### All Javascript Script ##### -->
+    <!-- jQuery-2.2.4 js -->
+    <script th:src="@{/js/jquery/jquery-2.2.4.min.js}"></script>
+
+    <title>Title</title>
+    <style>
+        input:focus{
+            outline: none;
+        }
+        .inputItems{
+            border:none;
+            background: none;
+        }
+        .submitBtn {
+            border: none;
+            background: rgb(170 197 195);
+            color: black;
+            padding: 5px;
+            font-weight: bold;
+        }
+        .submitBtn:hover {
+            transition: all 0.3s;
+            color:white;
+            background: rgb(70,100,100);
+            cursor: pointer;
+        }
+
+        .textDiv{
+            border: 1px solid rgb(151,151,151);
+            display: inline-block;
+            border-radius: 20px;
+            padding: 5px 10px;
+        }
+        .checkText{
+            display: none;
+            opacity: 0;
+            font-weight: bold;
+            margin-top: 13px;
+        }
+    </style>
+</head>
+<body>
+    <th:block th:replace="/layout/header.html :: header"></th:block>
+
+    <main>
+
+        <main>
+
+            <div class="signUpContainer" style="display: flex; justify-content: center">
+
+                <div style="width:70%; padding:30px; background: rgb(245,245,245)">
+                    <form action="/checkLoginAdmin" method="POST" id="loginForm">
+                        <div class="itemArea" style="text-align: center">
+                            <div style="font-size: 3vh; font-weight: bold; margin-bottom:20px;">Sign In</div>
+                            <div>
+                                <div class="textDiv"><input class="inputItems" id="login_id" type="text" name="login_id" placeholder="id"></div>
+                                <div class="CheckArea" style="height: 20px; text-align: center"></div>
+                            </div>
+                            <div>
+                                <div class="textDiv" style="margin-bottom: 5px;"><input class="inputItems" type="password" name="password" placeholder="password"></div>
+                            </div>
+                            <div>
+                                <p><a href="/signUp" style="display: inline-block; margin-left: 150px; font-size:13px; color:gray;">회원가입</a></p>
+                            </div>
+                            <div>
+                                <input class="inputItems submitBtn" type="submit" value="Sign In">
+                            </div>
+                            <div class="CheckArea" style="height: 20px; text-align: center">
+                                <span class="checkText" id="infoCheck" style="color:red; font-size:10px;">회원정보가 맞지 않습니다..</span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+        </main>
+
+    </main>
+
+    <th:block th:replace="/layout/footer.html :: footer"></th:block>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit',(e)=>{
+            e.preventDefault()
+
+            if(login_id.value===""){
+                alert('id값을 입력해주세요');
+                login_id.focus();
+                return;
+
+            }else if (document.getElementsByName('password')[0].value === "") {
+                alert('password를 입력해주세요');
+                document.getElementsByName('password')[0].focus();
+                return;
+            }
+            $.ajax({
+                url:'/checkLogin',
+                type:'POST',
+                data:JSON.stringify({login_id:document.getElementById('login_id').value,password:document.getElementsByName('password')[0].value}),
+                contentType:'application/json;charset=UTF-8',
+                success:(result)=>{
+                    if(result===false){
+                        document.getElementById('infoCheck').innerText = '회원정보가 없거나 일치하지 않습니다.';
+                        document.getElementById('infoCheck').style.display = "inline-block";
+                        document.getElementById('infoCheck').style.opacity = "1";
+                        document.getElementById('infoCheck').style.color = "red";
+                    }else{
+                        document.getElementById('loginForm').submit();
+                    }
+                }
+            });
+        })
+
+
+    </script>
+
+    <!-- Popper js -->
+    <script th:src="@{/js/bootstrap/popper.min.js}"></script>
+    <!-- Bootstrap js -->
+    <script th:src="@{/js/bootstrap/bootstrap.min.js}"></script>
+    <!-- All Plugins js -->
+    <script th:src="@{/js/plugins/plugins.js}"></script>
+    <!-- Active js -->
+    <script th:src="@{/js/active.js}"></script>
+</body>
+</html>

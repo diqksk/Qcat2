@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" th:href="@{/style.css}">
+
+    <link rel="icon" th:href="@{/img/core-img/favicon.ico}">
+
+
+
+    <!-- ##### All Javascript Script ##### -->
+    <!-- jQuery-2.2.4 js -->
+    <script th:src="@{/js/jquery/jquery-2.2.4.min.js}"></script>
+    <style>
+        input:focus{
+            outline: none;
+        }
+        .inputItems{
+            border:none;
+            background: none;
+        }
+        .submitBtn {
+            border: none;
+            background: rgb(170 197 195);
+            color: black;
+            padding: 5px;
+            font-weight: bold;
+        }
+
+        .submitBtn:hover {
+            transition: all 0.3s;
+            color:white;
+            background: rgb(70,100,100);
+            cursor: pointer;
+        }
+
+        .textDiv{
+            border: 1px solid rgb(151,151,151);
+            display: inline-block;
+            border-radius: 20px;
+            padding: 5px 10px;
+        }
+        .checkText{
+            display: none;
+            opacity: 0;
+            font-weight: bold;
+        }
+    </style>
+
+    <title>Title</title>
+</head>
+<body>
+    <th:block th:replace="/layout/header.html :: header"></th:block>
+
+    <main>
+
+        <div class="signUpContainer" style="display: flex; justify-content: center">
+
+            <div style="width:70%; padding:30px; background: rgb(245,245,245)">
+                <form action="/signUpForm" method="POST" onsubmit="return checkNoneInfo()">
+                    <div class="itemArea" style="text-align: center">
+                            <div style="font-size: 3vh; font-weight: bold; margin-bottom:20px;">Sign Up</div>
+                            <div>
+                                <div class="textDiv"><input class="inputItems" id="login_id" type="text" name="login_id" placeholder="id"></div>
+                                <div class="CheckArea" style="height: 20px; text-align: center">
+                                    <span class="checkText" id="idCheck" style="color:red; font-size:10px;">이미 존재하는 아이디 입니다.</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="textDiv" style="margin-bottom: 20px;"><input class="inputItems" type="password" name="password" placeholder="password"></div>
+                            </div>
+                            <div>
+                                <div class="textDiv" style="margin-bottom: 20px;"><input class="inputItems" type="text" name="name" placeholder="name"></div>
+                            </div>
+                            <div>
+                                <div class="textDiv"><input class="inputItems" id="email" type="email" name="email" placeholder="email"></div>
+                                <div class="CheckArea" style="height: 20px; text-align: center"><span  class="checkText" id="emailCheck" style="color:red; font-size:10px;">이미 존재하는 email 입니다.</span></div>
+                            </div>
+                            <div>
+                                <div class="textDiv" style="margin-bottom: 20px;"><input class="inputItems" type="text" name="phone" placeholder="phone"></div>
+                            </div>
+                            <div><input class="inputItems submitBtn" type="submit" value="Sign Up"></div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </main>
+
+    <th:block th:replace="/layout/footer.html :: footer"></th:block>
+
+
+    <script>
+        const login_id = document.getElementById('login_id');
+        const idCheck = document.getElementById('idCheck');
+        const email = document.getElementById('email');
+        const emailCheck = document.getElementById('emailCheck');
+
+        login_id.addEventListener('blur', () => {
+            if(login_id.value!=="")
+           checkInfo(login_id.value,"login_id")
+
+        });
+
+        email.addEventListener('blur', () => {
+            if(email.value!=="")
+            checkInfo(email.value,"email");
+        });
+
+        function checkNoneInfo(){
+            if(login_id.value===""){
+                alert('id값을 입력해주세요');
+                login_id.focus();
+                return false;
+
+            }else if (document.getElementsByName('password')[0].value === "") {
+                alert('password를 입력해주세요');
+                document.getElementsByName('password')[0].focus();
+                return false;
+
+            }else if (document.getElementsByName('name')[0].value === "") {
+                alert('name 입력해주세요');
+                document.getElementsByName('name')[0].focus();
+                return false;
+
+            }else if (document.getElementsByName('email')[0].value === "") {
+                alert('email 입력해주세요');
+                document.getElementsByName('email')[0].focus();
+                return false;
+
+            }else if (document.getElementsByName('phone')[0].value === "") {
+                alert('phone 입력해주세요');
+                document.getElementsByName('phone')[0].focus();
+                return false;
+
+            }
+
+            return true;
+
+        }
+
+
+        function checkInfo(value,type){
+            $.ajax({
+                url:'/checkSignUp',
+                type:'POST',
+                data:JSON.stringify({value:value,type:type}),
+                contentType: 'application/json;charset=UTF-8',
+                success:(result)=>{
+
+                    if(type === "login_id") {
+                        if (result === false) {
+                            idCheck.innerText = '이미 존재하는 아이디 입니다.';
+                            idCheck.style.color = 'red';
+                            idCheck.style.transition = 'all 0.5s';
+                            idCheck.style.display = 'block';
+                            idCheck.style.opacity = '1';
+                        } else {
+                            idCheck.innerText = '사용 가능한 아이디 입니다.';
+                            idCheck.style.color = 'green';
+                            idCheck.style.transition = 'all 0.5s';
+                            idCheck.style.display = 'block';
+                            idCheck.style.opacity = '1';
+                        }
+
+                    }else {
+                        if (result === false) {
+                            emailCheck.innerText = '이미 존재하는 email 입니다.';
+                            emailCheck.style.color = 'red';
+                            emailCheck.style.transition = 'all 0.5s';
+                            emailCheck.style.display = 'block';
+                            emailCheck.style.opacity = '1';
+                        } else {
+                            emailCheck.innerText = '사용 가능한 이메일 입니다.';
+                            emailCheck.style.color = 'green';
+                            emailCheck.style.transition = 'all 0.5s';
+                            emailCheck.style.display = 'block';
+                            emailCheck.style.opacity = '1';
+                        }
+
+                    }
+                }
+            });
+
+        }
+    </script>
+
+    <!-- Popper js -->
+    <script th:src="@{/js/bootstrap/popper.min.js}"></script>
+    <!-- Bootstrap js -->
+    <script th:src="@{/js/bootstrap/bootstrap.min.js}"></script>
+    <!-- All Plugins js -->
+    <script th:src="@{/js/plugins/plugins.js}"></script>
+    <!-- Active js -->
+    <script th:src="@{/js/active.js}"></script>
+</body>
+</html>

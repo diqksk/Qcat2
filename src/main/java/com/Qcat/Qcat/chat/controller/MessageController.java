@@ -24,7 +24,7 @@ public class MessageController extends Socket {
     ChatService chatService;
 
 
-    @GetMapping("/order/{store_id}")
+    @GetMapping("/admin/order/{store_id}")
     public String index(@PathVariable int store_id, Model model){
         model.addAttribute("store_id", store_id);
         return "/chat/chat";
