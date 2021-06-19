@@ -16,8 +16,8 @@
         SELECT count(*) FROM member WHERE login_id = #{login_id} AND password = #{password};
     </select>
 
-    <select id="getStoreList" parameterType="java.util.HashMap">
-        SELECT * FROM s.store_id, s.member_id,s.store_name,s.market_tel, s.location, m.name WHERE s.member_id = m.member_id AND login_id=#{login_id};
+    <select id="getStoreList" parameterType="String" resultType="java.util.HashMap">
+        SELECT s.store_id, s.member_id,s.store_name,s.market_tel, s.location, m.name FROM store s, member m WHERE s.member_id = m.member_id AND login_id= #{login_id};
     </select>
 
 </mapper>

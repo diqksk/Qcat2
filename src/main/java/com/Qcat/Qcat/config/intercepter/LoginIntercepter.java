@@ -19,8 +19,8 @@ public class LoginIntercepter implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        String loginId = (String)request.getSession().getAttribute("loginId");
-
+        String loginId = (String)request.getSession().getAttribute("login_id");
+        System.out.println(loginId);
         if(loginId != null){return true;}
 
         else {
@@ -29,7 +29,7 @@ public class LoginIntercepter implements HandlerInterceptor {
             String dest = (destQuery == null) ? destUri : destUri + "?" + destQuery;
             request.getSession().setAttribute("dest", dest);
 
-            response.sendRedirect("/member/login");
+            response.sendRedirect("/login");
             return false;
         }
     }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="">
@@ -18,13 +18,74 @@
 
 
     <title>Title</title>
+
+    <style>
+        .qrImg:hover{
+            cursor: pointer;
+        }
+        .marketItmes{
+            margin:0;
+        }
+        .modals{ position:absolute; width:100%; height:100%; background: rgba(0,0,0,0.8); top:0; left:0; display:none; z-index: 2000 }
+        .modal_content{
+            width:100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .storeName:hover{
+            color: #3d69f0 !important;
+            transition: all 0.8s !important;
+            cursor: pointer;
+        }
+
+
+    </style>
 </head>
 <body>
     <th:block th:replace="/layout/header.html :: header"></th:block>
 
+    <main style="margin:30px 0;">
+        <div class="boardContainer">
+            <div class="centerBox" style="display: flex; justify-content: center">
+                <div class="listBox" style="width:70%;">
+                    <div>
+                        <p style="font-weight: bold; color: black; font-size: 25px;">내 가게 목록</p>
+                    </div>
+                    <div  th:each="list : ${lists}" style="padding:10px; margin:20px 0;background: rgb(245,245,245);">
+                        <div style="display: flex; justify-content: space-between; padding:20px 40px;   border:1px solid gainsboro">
+                            <div>
+                                <p class="marketItmes storeName" style="font-weight: 550; font-size: 18px; margin-bottom: 10px; color:#ff3e3e;" th:onclick="getStoreDetail([[${list.store_id}]])" th:text="${list.store_name}"></p>
+                                <p class="marketItmes" ><span>📞 Tel : </span><span th:text="${list.market_tel}"></span></p>
+                                <p class="marketItmes" ><span>📭 Address : </span><span th:text="${list.location}"></span></p>
+                                <p class="marketItmes" ><span>🦰 Owner : </span><span th:text="${list.name}"></span></p>
+                            </div>
+                            <div>
+                                <img class="qrImg" th:src="@{https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl=http://localhost:8080/market/menuList/}+${list.store_id}" alt="" th:onclick="getQRCode([[${list.store_id}]])">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div class="modals"> <div class="modal_content" title="클릭하면 창이 닫힙니다."><img id="modalImh" style="width: 45vw; height: 45vw;" src="https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl=http://121.161.137.131:8080/market/menuList/1" alt=""> </div> </div>
 
     <th:block th:replace="/layout/footer.html :: footer"></th:block>
 
+    <script>
+        $(function(){ $("button").click(function(){ $(".modals").fadeIn(); }); $(".modal_content").click(function(){ $(".modals").fadeOut(); }); });
+
+        function getQRCode(store_id){
+            document.getElementById('modalImh').src='https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl=http://121.161.137.131:8080/market/menuList/'+store_id;
+            $(".modals").fadeIn();
+        }
+
+        function getStoreDetail(store_id){
+            location.href = '/admin/storeDetail/' + store_id;
+        }
+    </script>
 
     <!-- Popper js -->
     <script th:src="@{/js/bootstrap/popper.min.js}"></script>

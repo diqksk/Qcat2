@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -23,16 +25,16 @@ public class UserController {
 
     @GetMapping("/admin/board")
     public String getMyRestaurant(Model model, HttpSession session){
-        session.getAttribute("login_id");
-
-
-        return "/admin/board";
+        List<HashMap<String,Object>> lists =userService.getStoreList((String) session.getAttribute("login_id"));
+        model.addAttribute("lists", lists);
+        return "/user/board";
     }
 
     @PostMapping("/checkLoginAdmin")
     public String getLoginSession(UserDto dto, HttpSession session){
+        System.out.println(dto.getLogin_id());
         session.setAttribute("login_id",dto.getLogin_id());
-        return "redirect:/market/menuList/1";
+        return "redirect:/admin/board";
     }
 
     @GetMapping("/signUp")
