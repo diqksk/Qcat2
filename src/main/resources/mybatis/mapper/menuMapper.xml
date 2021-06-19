@@ -27,7 +27,7 @@
         select product_id, store_id,content ,img, product_regdate , product_name, category, price, (@num:=if(@group = `category`, @num +1, if(@group := `category`, 1, 1))) rnum
         from product p
         CROSS JOIN (select @num:=0, @category:=null) c
-        where p.store_id = 1
+        where p.store_id = #{store_id}
         order by category, product_id desc
         ) as temp
         where temp.rnum <= 5

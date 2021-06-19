@@ -30,11 +30,12 @@ public class TestController {
 
     @GetMapping("/menuList/{store_id}")
     public String getMenuList(@PathVariable("store_id") int store_id, Model model){
-
         System.out.println(store_id);
         model.addAttribute("menuList",menuService.getMenus(store_id));
         model.addAttribute("categories",menuService.getCategoryCount(store_id));
+        System.out.println("여기서나는에런가?1");
         model.addAttribute("store_id", store_id);
+        System.out.println("여기서나는에런가2");
         return "/market/marketDetail";
     }
 
@@ -44,8 +45,6 @@ public class TestController {
             , @PathVariable("page") int page
             , Model model
     ) {
-
-
 
         MenuDto dto = new MenuDto();
         dto.setStore_id(store_id);

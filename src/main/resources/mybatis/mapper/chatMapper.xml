@@ -17,8 +17,15 @@
         <parameter property="product_id"/>
         <parameter property="order_id"/>
         <parameter property="value"/>
-
     </parameterMap>
+
+    <select id="getBeforeOrders" resultType="java.util.HashMap">
+        SELECT os.order_id,p.product_name, os.order_regdate, p.price, od.value, p.content, p.img
+        FROM product p, order_detail od, orders os
+        WHERE p.product_id=od.product_id
+          AND od.order_id = os.order_id
+          AND p.store_id = #{store_id};
+    </select>
 
     <select id="getLastOrder" resultType="int" >
         SELECT max(order_id) FROM orders

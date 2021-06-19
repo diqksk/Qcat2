@@ -75,7 +75,7 @@
                         </div>
                         <div style="padding:13px 0 0 0; margin:0 0 20px 0; font-size:14px; font-weight: 600; display: flex; justify-content: space-between; align-items: baseline;">
                             <div><span>Price:</span><span id="totalPrice">0</span>₩</div>
-                            <input type="button" value="Buy" style="border:none; background:rgb(190,210,210); border-radius:20px; padding:5px 10px;" onclick="sendMsg()">
+                            <input type="button" value="Buy" style="border:none; background:rgb(190,210,210); border-radius:20px; padding:5px 10px;" th:onclick="sendMsg([[${store_id}]])">
                         </div>
                     </div>
                 </div>
@@ -209,13 +209,6 @@
             <!-- ##### Instagram Area End ##### -->
         </div>
     </main>
-
-    <input type="text" placeholder="보낼 메세지를 입력하세요" class="content">
-    <input type="button" value="전송" class="sendBtn" onclick="sendMsg()">
-    <div>
-        <span>메세지</span>
-        <div class="msgArea"></div>
-    </div>
 
     <th:block th:replace="/layout/footer.html :: footer"></th:block>
 
@@ -372,11 +365,13 @@
         }
 
 
-        function sendMsg(){
+        function sendMsg(store_id){
             $.get('/getOrderNum', (orderNum) => {
                 cart.push(orderNum);
+                cart.push(store_id);
                 console.log(cart);
                 socket.send(JSON.stringify(cart));
+                cart.pop();
                 cart.pop();
             });
         }

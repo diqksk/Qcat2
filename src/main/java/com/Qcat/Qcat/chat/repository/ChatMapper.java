@@ -14,6 +14,7 @@ public interface ChatMapper {
     int getLastOrder();
     int insertOrder(OrderDto dto);
     int insertOrderDetail(OrderDetailDto dto);
-    List<Map<String, Object>> getBeforeOrders(int member_id);
+    List<Map<String, Object>> getBeforeOrders(int store_id);
+
 
 }

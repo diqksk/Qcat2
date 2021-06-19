@@ -31,10 +31,10 @@
 </head>
 <body>
     <th:block th:replace="/layout/header.html :: header"></th:block>
-
+    <input type="hidden" th:value="${store_id}" id="store_id">
     <main>
         <div class="container">
-            <div style="padding-top:20px; max-height: 1000px; overflow: auto">
+            <div style="padding-top:20px; max-height: 1000px; overflow: auto" id="msgZone">
                 <div class="msgArea">
                 <!-- 채팅이오는곳-->
                 </div>
@@ -47,6 +47,8 @@
     <script>
         let socket = new WebSocket("ws://localhost:8080/websocket");
 
+        const store_id = document.getElementById('store_id');
+
         socket.onopen = (e) => {
             console.log("open server");
         };
@@ -56,37 +58,47 @@
         };
 
         socket.onmessage=(e)=>{
-            console.log(e.data);
-            let msgArea = document.querySelector('.msgArea');
-            let newMsg = document.createElement('div');
-            let productMsg = document.createElement('div');
-            let parseInfo = JSON.parse(e.data);
-            console.log(parseInfo);
-            let date = new Date();
-            let realMsg = '<div style="margin-bottom:20px; border-radius: 18px; background: #dadfe5; padding:10px;">' +
-                '<p style="padding:0 0 0 10px; margin:0px; background: rgb(176 192 175); font-size:18px; border-radius: 10px 10px 0 0;">' +
-                '<strong style="color:black">주문번호 :'+parseInfo[parseInfo.length-1]+'번 </strong></p>';
-            let totalPrice = 0;
-            for(let i = 0 ; i < parseInfo.length-1 ; i++){
-                let product = parseInfo[i].product;
-                let price = parseInfo[i].qty * product.price;
 
-                realMsg += '<p class="productInfo">' + product.product_name + ": " + product.price + " * " + parseInfo[i].qty + " = " + price + '</p>';
-                totalPrice+=price;
+            let parseInfo = JSON.parse(e.data);
+            if (parseInfo[parseInfo.length-1] === Number(store_id.value)) {
+                console.log('ㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎ')
+                parseInfo.pop();
+                let msgArea = document.querySelector('.msgArea');
+                let newMsg = document.createElement('div');
+                let productMsg = document.createElement('div');
+
+                console.log(parseInfo);
+                let date = new Date();
+                let realMsg = '<div style="margin-bottom:20px; border-radius: 18px; background: #dadfe5; padding:10px;">' +
+                    '<p style="padding:0 0 0 10px; margin:0px; background: rgb(176 192 175); font-size:18px; border-radius: 10px 10px 0 0;">' +
+                    '<strong style="color:black">주문번호 :' + parseInfo[parseInfo.length - 1] + '번 </strong></p>';
+                let totalPrice = 0;
+
+
+                for (let i = 0; i < parseInfo.length - 1; i++) {
+                    let product = parseInfo[i].product;
+                    let price = parseInfo[i].qty * product.price;
+
+                    realMsg += '<p class="productInfo">' + product.product_name + ": " + product.price + " * " + parseInfo[i].qty + " = " + price + '</p>';
+                    totalPrice += price;
+                }
+
+                realMsg += '<p style="font-size:18px; color:black; text-align: right; ">TotalPrice : ' + totalPrice + '</p></div>';
+
+                newMsg.innerText = 'System : ' + "새 주문이 도착했습니다." + date.getHours() + ":" + date.getMinutes();
+                productMsg.innerHTML = realMsg;
+                msgArea.append(newMsg);
+                msgArea.append(productMsg);
+                document.getElementById('msgZone').scrollTop = document.getElementById('msgZone').scrollHeight;
+
+                insertAjax(parseInfo);
+                sendMsg();
             }
 
-            realMsg += '<p style="font-size:18px; color:black; text-align: right; ">TotalPrice : '+totalPrice+'</p></div>'
 
-            newMsg.innerText = 'System : '+"새 주문이 도착했습니다."+date.getHours()+":"+date.getMinutes();
-            productMsg.innerHTML = realMsg;
-            console.log(parseInfo);
-            msgArea.append(newMsg);
-            msgArea.append(productMsg);
-            document.body.scrollTop = document.body.scrollHeight;
-
-            insertAjax(parseInfo);
-            sendMsg();
         }
+
+        getBeforeOrders();
 
         function sendMsg(){
             socket.send("주문이 요청 되었습니다.");
@@ -121,9 +133,67 @@
         }
 
         function getBeforeOrders(){
-            $.get('/getBeforeOrders', (Lists) => {
+            $.get('/getBeforeOrders?store_id='+store_id.value, (Lists) => {
                 console.log(Lists);
+                let beforeListOrder = Lists[0].order_id;
+                let realMsg = "";
+                let msgArea = document.querySelector('.msgArea');
+                let totalPrice = 0;
+                let idx= 0;
+                for (list of Lists) {
 
+                    if(idx===0){
+                        realMsg='<div style="margin-bottom:20px; border-radius: 18px; background: #dadfe5; padding:10px;">' +
+                            '<p style="padding:0 0 0 10px; margin:0px; background: rgb(176 192 175); font-size:18px; border-radius: 10px 10px 0 0;">' +
+                            '<strong style="color:black">주문번호 :'+list.order_id+'번 </strong></p>';
+                    }
+
+                    if(list.order_id===beforeListOrder){
+                        let price = list.price * list.value;
+                        realMsg += '<p class="productInfo">' + list.product_name + ": " + list.price + " * " + list.value + " = " + price + '</p>';
+                        totalPrice+=price;
+                    }else{
+
+                        realMsg += '<p style="font-size:18px; color:black; text-align: right; ">TotalPrice : '+totalPrice+'</p></div>'
+                        totalPrice = 0;
+
+                        beforeListOrder = list.order_id;
+                        let newMsg = document.createElement('div');
+                        newMsg.innerText = 'System : ' + "새 주문이 도착했습니다." + list.order_regdate;
+                        let productMsg = document.createElement('div');
+                        productMsg.innerHTML = realMsg;
+
+                        msgArea.append(newMsg);
+                        msgArea.append(productMsg);
+
+                        realMsg='<div style="margin-bottom:20px; border-radius: 18px; background: #dadfe5; padding:10px;">' +
+                            '<p style="padding:0 0 0 10px; margin:0px; background: rgb(176 192 175); font-size:18px; border-radius: 10px 10px 0 0;">' +
+                            '<strong style="color:black">주문번호 :'+list.order_id+'번 </strong></p>';
+
+                    }
+
+                    idx++
+
+                    if(idx===Lists.length){
+
+                        let price = list.price * list.value;
+                        realMsg += '<p class="productInfo">' + list.product_name + ": " + list.price + " * " + list.value + " = " + price + '</p>';
+                        totalPrice+=price;
+
+                        realMsg += '<p style="font-size:18px; color:black; text-align: right; ">TotalPrice : '+totalPrice+'</p></div>'
+                        totalPrice = 0;
+
+                        beforeListOrder = list.order_id;
+                        let newMsg = document.createElement('div');
+                        newMsg.innerText = 'System : ' + "새 주문이 도착했습니다." + list.order_regdate;
+                        let productMsg = document.createElement('div');
+                        productMsg.innerHTML = realMsg;
+
+                        msgArea.append(newMsg);
+                        msgArea.append(productMsg);
+                    }
+                }
+                document.getElementById('msgZone').scrollTop = document.getElementById('msgZone').scrollHeight;
             });
         }
 

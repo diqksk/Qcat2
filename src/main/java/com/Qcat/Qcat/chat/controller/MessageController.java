@@ -1,13 +1,12 @@
 package com.Qcat.Qcat.chat.controller;
 
 import com.Qcat.Qcat.chat.service.ChatService;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
@@ -25,8 +24,9 @@ public class MessageController extends Socket {
     ChatService chatService;
 
 
-    @GetMapping("/")
-    public String index(){
+    @GetMapping("/order/{store_id}")
+    public String index(@PathVariable int store_id, Model model){
+        model.addAttribute("store_id", store_id);
         return "/chat/chat";
     }
 
@@ -65,9 +65,10 @@ public class MessageController extends Socket {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
 
-        }
+            }//if문 끝
+
+        } //for문 끝
 
     }
 
