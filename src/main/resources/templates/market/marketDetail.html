@@ -231,7 +231,7 @@
 
         function createSession(category,store_id){
             sessionStorage.setItem('cart', JSON.stringify(cart));
-            let url = '/menuDetailList/' + category + '/' + store_id + '/1';
+            let url = '/market/menuDetailList/' + category + '/' + store_id + '/1';
             location.href=url;
         }
 

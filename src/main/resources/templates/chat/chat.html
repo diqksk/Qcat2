@@ -26,13 +26,16 @@
         .mainContainer{
             padding:200px;
         }
+        #mainItem{
+            transition: all 0.4s;
+        }
     </style>
     <title>Title</title>
 </head>
 <body>
     <th:block th:replace="/layout/header.html :: header"></th:block>
     <input type="hidden" th:value="${store_id}" id="store_id">
-    <main>
+    <main id="mainItem">
         <div class="container">
             <div style="padding-top:20px; max-height: 1000px; overflow: auto" id="msgZone">
                 <div class="msgArea">
@@ -93,6 +96,10 @@
 
                 insertAjax(parseInfo);
                 sendMsg();
+                document.getElementById('mainItem').style.background = "#f2e4e4";
+                setTimeout(()=>{
+                    document.getElementById('mainItem').style.background = '#ffffff';
+                },300)
             }
 
 
@@ -131,6 +138,7 @@
                 }
             });
         }
+
 
         function getBeforeOrders(){
             $.get('/getBeforeOrders?store_id='+store_id.value, (Lists) => {
