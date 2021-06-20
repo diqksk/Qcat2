@@ -83,65 +83,67 @@
                             <!-- Nav Start -->
                             <div class="classynav">
                                 <ul>
-                                    <li><a href="../../../../../../../bueno-master/bueno-master/index.html">Home</a></li>
+                                    <li><a href="/admin/board">Home</a></li>
+                                    <li th:if="${session.store_id != null}"><a th:href="|/admin/order/${session.store_id}|">Orders</a></li>
+                                    <li th:if="${session.store_id == null}"><a href="/admin/board">Go Board</a></li>
                                     <li><a href="#">About Us</a></li>
-                                    <li><a href="#">Pages</a>
-                                        <ul class="dropdown">
-                                            <li><a href="../../../../../../../bueno-master/bueno-master/index.html">Home</a></li>
-                                            <li><a href="../../../../../../../bueno-master/bueno-master/catagory.html">Catagory</a></li>
-                                            <li><a href="../../../../../../../bueno-master/bueno-master/catagory-post.html">Catagory Post</a></li>
-                                            <li><a href="../../../../../../../bueno-master/bueno-master/single-post.html">Single Post</a></li>
-                                            <li><a href="../../../../../../../bueno-master/bueno-master/receipe.html">Recipe</a></li>
-                                            <li><a href="../../../../../../../bueno-master/bueno-master/contact.html">Contact</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="#">Recipes</a>
-                                        <div class="megamenu">
-                                            <ul class="single-mega cn-col-4">
-                                                <li><a href="#">- Recipe</a></li>
-                                                <li><a href="#">- Bread</a></li>
-                                                <li><a href="#">- Breakfast</a></li>
-                                                <li><a href="#">- Meat</a></li>
-                                                <li><a href="#">- Fastfood</a></li>
-                                                <li><a href="#">- Salad</a></li>
-                                                <li><a href="#">- Soup</a></li>
-                                            </ul>
-                                            <ul class="single-mega cn-col-4">
-                                                <li><a href="#">- Recipe</a></li>
-                                                <li><a href="#">- Bread</a></li>
-                                                <li><a href="#">- Breakfast</a></li>
-                                                <li><a href="#">- Meat</a></li>
-                                                <li><a href="#">- Fastfood</a></li>
-                                                <li><a href="#">- Salad</a></li>
-                                                <li><a href="#">- Soup</a></li>
-                                            </ul>
-                                            <ul class="single-mega cn-col-4">
-                                                <li><a href="#">- Recipe</a></li>
-                                                <li><a href="#">- Bread</a></li>
-                                                <li><a href="#">- Breakfast</a></li>
-                                                <li><a href="#">- Meat</a></li>
-                                                <li><a href="#">- Fastfood</a></li>
-                                                <li><a href="#">- Salad</a></li>
-                                                <li><a href="#">- Soup</a></li>
-                                            </ul>
-                                            <ul class="single-mega cn-col-4">
-                                                <li><a href="#">- Recipe</a></li>
-                                                <li><a href="#">- Bread</a></li>
-                                                <li><a href="#">- Breakfast</a></li>
-                                                <li><a href="#">- Meat</a></li>
-                                                <li><a href="#">- Fastfood</a></li>
-                                                <li><a href="#">- Salad</a></li>
-                                                <li><a href="#">- Soup</a></li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li><a href="../../../../../../../bueno-master/bueno-master/single-post.html">Blog</a></li>
-                                    <li><a href="../../../../../../../bueno-master/bueno-master/contact.html">Contact</a></li>
+<!--                                    <li><a href="#">Pages</a>-->
+<!--                                        <ul class="dropdown">-->
+<!--                                            <li><a href="../../../../../../../bueno-master/bueno-master/index.html">Home</a></li>-->
+<!--                                            <li><a href="../../../../../../../bueno-master/bueno-master/catagory.html">Catagory</a></li>-->
+<!--                                            <li><a href="../../../../../../../bueno-master/bueno-master/catagory-post.html">Catagory Post</a></li>-->
+<!--                                            <li><a href="../../../../../../../bueno-master/bueno-master/single-post.html">Single Post</a></li>-->
+<!--                                            <li><a href="../../../../../../../bueno-master/bueno-master/receipe.html">Recipe</a></li>-->
+<!--                                            <li><a href="../../../../../../../bueno-master/bueno-master/contact.html">Contact</a></li>-->
+<!--                                        </ul>-->
+<!--                                    </li>-->
+<!--                                    <li><a href="#">Recipes</a>-->
+<!--                                        <div class="megamenu">-->
+<!--                                            <ul class="single-mega cn-col-4">-->
+<!--                                                <li><a href="#">- Recipe</a></li>-->
+<!--                                                <li><a href="#">- Bread</a></li>-->
+<!--                                                <li><a href="#">- Breakfast</a></li>-->
+<!--                                                <li><a href="#">- Meat</a></li>-->
+<!--                                                <li><a href="#">- Fastfood</a></li>-->
+<!--                                                <li><a href="#">- Salad</a></li>-->
+<!--                                                <li><a href="#">- Soup</a></li>-->
+<!--                                            </ul>-->
+<!--                                            <ul class="single-mega cn-col-4">-->
+<!--                                                <li><a href="#">- Recipe</a></li>-->
+<!--                                                <li><a href="#">- Bread</a></li>-->
+<!--                                                <li><a href="#">- Breakfast</a></li>-->
+<!--                                                <li><a href="#">- Meat</a></li>-->
+<!--                                                <li><a href="#">- Fastfood</a></li>-->
+<!--                                                <li><a href="#">- Salad</a></li>-->
+<!--                                                <li><a href="#">- Soup</a></li>-->
+<!--                                            </ul>-->
+<!--                                            <ul class="single-mega cn-col-4">-->
+<!--                                                <li><a href="#">- Recipe</a></li>-->
+<!--                                                <li><a href="#">- Bread</a></li>-->
+<!--                                                <li><a href="#">- Breakfast</a></li>-->
+<!--                                                <li><a href="#">- Meat</a></li>-->
+<!--                                                <li><a href="#">- Fastfood</a></li>-->
+<!--                                                <li><a href="#">- Salad</a></li>-->
+<!--                                                <li><a href="#">- Soup</a></li>-->
+<!--                                            </ul>-->
+<!--                                            <ul class="single-mega cn-col-4">-->
+<!--                                                <li><a href="#">- Recipe</a></li>-->
+<!--                                                <li><a href="#">- Bread</a></li>-->
+<!--                                                <li><a href="#">- Breakfast</a></li>-->
+<!--                                                <li><a href="#">- Meat</a></li>-->
+<!--                                                <li><a href="#">- Fastfood</a></li>-->
+<!--                                                <li><a href="#">- Salad</a></li>-->
+<!--                                                <li><a href="#">- Soup</a></li>-->
+<!--                                            </ul>-->
+<!--                                        </div>-->
+<!--                                    </li>-->
+<!--                                    <li><a href="../../../../../../../bueno-master/bueno-master/single-post.html">Blog</a></li>-->
+<!--                                    <li><a href="../../../../../../../bueno-master/bueno-master/contact.html">Contact</a></li>-->
                                 </ul>
 
                                 <!-- Login/Register -->
                                 <div class="login-area">
-                                    <a href="#">Login / Register</a>
+                                    <a href="/login">Login / Register</a>
                                 </div>
                             </div>
                             <!-- Nav End -->

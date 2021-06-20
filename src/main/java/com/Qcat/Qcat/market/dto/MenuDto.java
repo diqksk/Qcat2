@@ -14,6 +14,7 @@ public class MenuDto {
     private String content;
     private int price;
     private String img;
+    private String memo;
     private Date product_regdate;
 
 }

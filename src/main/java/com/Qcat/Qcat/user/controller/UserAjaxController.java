@@ -39,7 +39,20 @@ public class UserAjaxController {
         }else{
             return false;
         }
+    }
 
+    @PostMapping("/changeMenu")
+    public int changeMenu(@RequestBody HashMap<String,Object> json){
+        System.out.println(json);
+        userService.updateProduct(json);
+
+        return 1;
+    }
+
+    @PostMapping("/deleteMenu")
+    public int deleteMenu(@RequestBody HashMap<String,Object> json){
+        userService.deleteMenu(json);
+        return 1;
     }
 
 }

@@ -23,9 +23,9 @@ public class TestController {
     @PostMapping("/admin/insertMenu")
     public String insertMenu(MenuDto dto){
 
-        System.out.println(menuService.insertMenu(dto));
-
-        return "/market/register";
+        menuService.insertMenu(dto);
+        String link = "redirect:/admin/storeDetail/" + dto.getStore_id() + "/1";
+        return link;
     }
 
     @GetMapping("/market/menuList/{store_id}")

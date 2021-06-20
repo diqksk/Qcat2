@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" th:href="@{/style.css}">
+
+    <link rel="icon" th:href="@{/img/core-img/favicon.ico}">
+
+
+
+    <!-- ##### All Javascript Script ##### -->
+    <!-- jQuery-2.2.4 js -->
+    <script th:src="@{/js/jquery/jquery-2.2.4.min.js}"></script>
+
+
+    <title>Title</title>
+
+    <style>
+        .modals{ position:fixed; width:100%; height:100%; background: rgba(0,0,0,0.8); top:0; left:0; display:none; z-index: 2000 }
+        .modal_content{
+            width:100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .product_img{
+            width: 250px;
+            height: 200px;
+        }
+
+        .uploadResult{
+            width:100px;
+            height: 100px;
+            margin:0;
+            padding:0;
+            background: rgb(235,235,235);
+        }
+        .thumbnailImg{
+            position: absolute;
+            width:100px;
+            height: 100px;
+            z-index: 0;
+        }
+
+        main{
+            margin-bottom: 50px;
+        }
+        #addMenuBtn:hover{
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #e2c6a2 !important;
+        }
+        #deleteBtn:hover{
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #2196f3 !important;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+    <th:block th:replace="/layout/header.html :: header"></th:block>
+
+    <main style="margin:30px 0;">
+        <div class="boardContainer">
+            <div class="centerBox" style="display: flex; justify-content: center">
+                <div class="listBox" style="width:60%;">
+                    <div style="padding:0 20px;">
+                        <h2>상품관리</h2>
+                    </div>
+                    <div style="padding:0 20px; text-align: right">
+                        <button id="addMenuBtn" style="border:none; background:#c0dcc1; padding: 3px 8px; border-radius:10px; font-weight: bold;" th:onclick="addMenu([[${store_id}]])">메뉴 추가</button>
+                    </div>
+                    <div style="padding:20px; margin:20px; background: rgb(245,245,245)" th:each="list : ${lists}">
+                        <div style="border:1px solid gainsboro; display: flex; padding:10px; align-items: center; justify-content: space-around;">
+                            <div class="productContentArea" style="height: 200px; padding:10px;">
+                                <div style="font-size:12px; color:lightcoral; font-weight:bold; margin-bottom: 20px; "><span th:text="${list.category}"></span><span id="deleteBtn" style="color:#c3c3c3; font-size:10px; margin-left: 10px; font-weight: 400; " th:onclick="AcceptModal([[${list.product_id}]],[[${list.img}]])">[X]</span></div>
+                                <div><span style="font-weight: bold">품명 : </span><span th:text="${list.product_name}" th:onclick="changeProductInfo(this,'product_name',[[${list.product_id}]])"></span></div>
+                                <div><span style="font-weight: bold">가격 : </span><span th:text="${list.price}" th:onclick="changeProductInfo(this,'price',[[${list.product_id}]])"></span></div>
+                                <div><span style="font-weight: bold">설명 : </span><span th:text="${list.content}" th:onclick="changeProductInfo(this,'content',[[${list.product_id}]])"></span></div>
+                                <div><span><textarea name="" id="" cols="30" rows="10" placeholder="memo" style="margin-top:20px; height: 60px; padding:5px; border:none; resize: none;" th:text="${list.memo}" th:onblur="changeMemo(this,[[${list.product_id}]])"></textarea></span></div>
+                            </div>
+                            <div class="imageArea">
+                                <img class="product_img" style="border-radius: 20px;" th:src="|/display?fileName=${list.img}|" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: center">
+                        <span style="margin:10px 5px" th:each="num : ${#numbers.sequence(1,total)}"><a th:href="${num}">[<span th:text="${num}"></span>]</a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+<!--    <div class="modals">-->
+<!--        <div class="modal_content" title="클릭하면 창이 닫힙니다.">-->
+<!--            <img id="modalImh" style="width: 45vw; height: 45vw;" src="https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl=http://121.161.137.131:8080/market/menuList/1" alt="">-->
+<!--        </div>-->
+<!--    </div>-->
+
+
+    <div class="acceptModal modals">
+        <div class="acceptModal_content modal_content" title="클릭하면 창이 닫힙니다.">
+            <div style="background: white; padding:30px 30px 10px 30px; border-radius: 20px;">
+                <div style="margin-bottom: 10px;">
+                    <span style="font-weight: bold;">정말로 삭제하시겠습니까?</span>
+                </div>
+                <div style="text-align: center;">
+                    <button id="cancleBtn" style="border:none; background:#969696; color: white; margin:5px; font-weight: bold; padding:3px 7px; border-radius: 5px;">취소</button>
+                    <button id="acceptBtn" style="border:none; background:#83e087; font-weight: bold; margin:5px; padding:3px 7px; border-radius: 5px;">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="uploadModal modals">
+        <div class="uploadModal_content modal_content" title="클릭하면 창이 닫힙니다.">
+            <div style="background: white; padding:30px 30px 10px 30px; border-radius: 20px;">
+                <div>
+                    <h2>상품등록</h2>
+                    <form th:action="@{/admin/insertMenu}" th:method="POST">
+                        <div style="display:flex; align-items: center; padding:20px 20px 0 20px;">
+                            <div>
+                                <div class="uploadResult" >
+                                    <ul style="font-size:10px;">
+                                        <!-- 업로드이미지가 올라가는 곳 -->click for upload
+                                    </ul>
+                                    <input type="file" class="custom-file-input" id="fileInput" multiple style="width:100%;height: 100%">
+                                    <label class="custom-file-label" data-browse="Browse"></label>
+                                </div>
+                            </div>
+                            <div>
+                                <input type="hidden" th:value="${store_id}"  name="store_id">
+                            </div>
+                            <div class=".box">
+                                <input type="hidden" class="inputImg" name="img" value="">
+                            </div>
+                            <div style="width:80%; padding:10px 10px 10px 30px">
+                                <p>
+                                    <select id="selectedBox" name="cats" onchange="catResult()">
+                                        <option value="">선택</option>
+                                        <option th:onclick="catResult(this,[[${cat.category}]])" th:each=" cat: ${category}" th:text="${cat.category}" th:value="${cat.category}"></option>
+                                        <option value="direct">직접입력</option>
+                                    </select>
+                                    <input type="hidden" placeholder="카테고리를 적어주세요" id="catInput" name="category">
+                                </p>
+                                <p><input type="text" placeholder="상품 이름을 적어주세요" name="product_name"></p>
+                                <p><input type="text" placeholder="상품 가격을 적어주세요" name="price"></p>
+                                <p><input type="text" placeholder="상품 설명을 적어주세요" name="content"></p>
+                            </div>
+                        </div>
+                        <div style="text-align: right; margin-bottom:20px">
+                            <input type="button" id="uploadCancleBtn" value="취소" style="border: none; padding:3px 8px; border-radius: 5px; background:#b7daea; color: white; font-weight: bold; ">
+                            <input type="submit" id="submitBtn" style="border: none; padding:3px 8px; border-radius: 5px; background:#a8a8a8; font-weight: bold; " th:value="제출">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:replace="/layout/footer.html :: footer"></th:block>
+
+    <script>
+        // $(function(){
+        //     $("button").click(function(){
+        //         $(".modals").fadeIn();
+        //     });
+        //     $(".modal_content").click(function(){
+        //         $(".modals").fadeOut();
+        //     });
+        // });
+        function catResult(){
+            console.log("바뀌엇음");
+            const selectedBox = document.getElementById('selectedBox');
+            const catInput = document.getElementById('catInput');
+            const fakeBox = document.querySelector('.nice-select');
+
+            if(selectedBox.value==='direct'){
+                selectedBox.style.display = 'none';
+                fakeBox.style.display='none';
+                selectedBox.disabled = 'true';
+                catInput.type = 'text';
+                console.log("다이렉트")
+            }else{
+                console.log("엘스")
+                catInput.value = selectedBox.value;
+                selectedBox.disabled;
+            }
+        }
+
+        function addMenu(store_id){
+            const acceptBtn = document.getElementById('uploadBtn');
+
+            $("#uploadCancleBtn").click(function () {
+                $(".uploadModal").fadeOut();
+            });
+
+            $(".uploadModal").fadeIn();
+
+
+        }
+
+
+        function AcceptModal(product_id,img){
+            const acceptBtn = document.getElementById('acceptBtn');
+
+            $("#cancleBtn").click(function () {
+                $(".acceptModal").fadeOut();
+            });
+
+            acceptBtn.addEventListener('click', () => {
+                deleteImg(product_id,img);
+            });
+
+            $(".acceptModal").fadeIn();
+
+
+        }
+
+
+        function changeProductInfo(thisSpan,type,product_id){
+            let section=""
+            if(type==='product_name'){
+                section += '품명';
+            }else if(type==='price'){
+                section += '가격';
+            }else{
+                section += '설명';
+            }
+
+            let textParente=thisSpan.parentNode
+            textParente.innerHTML='<span style="font-weight: bold">'+section+' : </span><input type="text" style="border:none;" value="'+thisSpan.innerHTML+'">';
+
+
+            textParente.lastChild.addEventListener('blur', () => {
+                let value = textParente.lastChild.value;
+                console.log(`텍스트박스 벨류는~ ${value}`);
+                $.ajax({
+                    url:'/changeMenu',
+                    type:'POST',
+                    data:JSON.stringify({type:type, value: value, product_id:product_id}),
+                    contentType: 'application/json;charset=UTF-8',
+                    success:(returnValue)=>{
+                        alert(returnValue);
+                        textParente.innerHTML='<span style="font-weight: bold">'+section+' : </span><span onclick="changeProductInfo(this,\'product_name\','+product_id+')">'+value+'</span>';
+                    }
+                });
+
+            });
+
+        }
+
+        function deleteImg(product_id,img){
+                console.log("delete file");
+
+                let targetFile = img;
+
+                alert(targetFile);
+                $.ajax({
+                    url: '/admin/removeFile',
+                    data: {fileName: targetFile},
+                    dataType: 'text',
+                    type: 'POST',
+                    success: (result) => {
+                        deleteProduct(product_id)
+                    }
+                });
+
+        }
+
+        function changeMemo(textNode,product_id){
+            let value=textNode.value
+            $.ajax({
+                url:'/changeMenu',
+                type:'POST',
+                data:JSON.stringify({type:"memo", value: value, product_id:product_id}),
+                contentType: 'application/json;charset=UTF-8',
+                success:(returnValue)=>{
+                    alert('수정성공');
+                }
+            });
+        }
+
+        function deleteProduct(product_id){
+
+            $.ajax({
+                url:'/deleteMenu',
+                type:'POST',
+                data:JSON.stringify({product_id:product_id}),
+                contentType: 'application/json;charset=UTF-8',
+                success:(returnValue)=>{
+                    alert('삭제되었습니다.');
+                    location.reload();
+                }
+            });
+        }
+
+    </script>
+
+    <script>
+        $(document).ready(function (e) {
+            const regex = new RegExp("(.*?)\\.(exe|sh|zip|alz|tiff)$");
+            const maxSize = 10485760; //10MB
+
+            function checkExtension(fileName, fileSize) {
+
+                if (fileSize >= maxSize) {
+                    alert("파일 사이즈 초과");
+                    return false;
+                }
+
+                if(regex.test(fileName)){
+                    alert("해당 종류의 파일은 업로드할 수 없습니다.");
+                    return false;
+                }
+                return true;
+            }
+
+            $(".custom-file-input").on("change", function () {
+
+                let fileName = $(this).val().split("//").pop(); // //로 나눈배열을 마지막요소제거한후 마지막요소만 반환
+                $(this).siblings(".custom-file-label").addClass("selected").html(fileName); //선택된 파일이름으로 바꿔줌 (전부다)
+
+                let formData = new FormData();
+
+                let inputFile = $(this); //여러개파일이라 배열
+
+                let files = inputFile[0].files; //왜 0번인덱스?
+
+                let appended = false;
+
+                for (let i = 0; i < files.length; i++) {
+                    if (!checkExtension(files[i].name, files[i].size)) { //파일이 규격에 맞지않으면 업로드안함
+                        return false;
+                    }
+
+                    console.log(files[i]);
+                    formData.append("uploadFiles", files[i]);
+                    appended = true;
+                }
+
+                //업로드안하기
+                if(!appended){
+                    return;
+                }
+
+                $.ajax({
+                    url: '/admin/uploadAjax',
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    type: 'POST',
+                    dataType: 'json',
+                    success:(result)=>{
+                        console.log(result);
+                        showResult(result);
+                    },
+                    error:(jqXHR,textStatus,errorThrown)=>{
+                        console.log(textStatus);
+                    }
+                });
+            });
+
+            let thumURL = "";
+            function showResult(uploadResultArr) { //받은값은 썸네일과 원본파일이름과 경로
+                let uploadUL = $(".uploadResult ul");
+
+                let str = "";
+
+                $(uploadResultArr).each((i, obj) => {
+
+                    str += "<li data-name='" + obj.fileName + "' data-path='" + obj.folderPath + "' data-uuid='" + obj.uuid + "'>";
+                    str + " <div>";
+                    str += "<img class='thumbnailImg' src='/display?fileName=" + obj.thumbnailURL + "'>";
+                    str += "<br><button type='button' data-file=\'" + obj.imageURL + "\' "
+                    str += "class='btn-warning btn-sm thumbnailBtn'>X</button>";  //버튼다음 br빠짐
+                    str += "</div>";
+                    str + "</li>";
+                    thumURL += obj.thumbnailURL;
+                });
+
+                uploadUL.text("");
+                uploadUL.append(str);
+            }
+
+            $(".uploadResult").on("click", "li button", function (e) {
+                console.log("delete file");
+
+                let targetFile = $(this).data("file");
+
+                let targetLi = $(this).closest("li");
+                alert(targetFile);
+                $.ajax({
+                    url: '/admin/removeFile',
+                    data: {fileName: targetFile},
+                    dataType: 'text',
+                    type: 'POST',
+                    success: (result) => {
+                        alert(result);
+                        targetLi.remove();
+                    }
+                });
+
+                $(".uploadResult ul").text("click for upload");
+            });
+
+            //업로드버튼 누르면 preventDefault로 막고 input hidden에 파일의 name,path, uuid를 만들어 폼과함께전송시켜준다.
+
+            $("#submitBtn").on("click", (e) => {
+                e.preventDefault();
+
+                let str = "";
+
+                $(".uploadResult li").each((i, obj) => {
+                    let target = $(obj);
+                    let fake = thumURL.lastIndexOf("/");
+                    thumURL = thumURL.substring(0,fake)+"_"+thumURL.substring(fake+1);
+                    str += "<input type='hidden' name='img' value='"+thumURL+"'>";
+
+                    $(".inputImg").val(target.data('path')+"/"+target.data('uuid')+"_"+target.data('name'))
+                });
+
+
+                $("form").submit();
+            });
+
+        });
+    </script>
+
+    <!-- Popper js -->
+    <script th:src="@{/js/bootstrap/popper.min.js}"></script>
+    <!-- Bootstrap js -->
+    <script th:src="@{/js/bootstrap/bootstrap.min.js}"></script>
+    <!-- All Plugins js -->
+    <script th:src="@{/js/plugins/plugins.js}"></script>
+    <!-- Active js -->
+    <script th:src="@{/js/active.js}"></script>
+</body>
+</html>

@@ -57,9 +57,9 @@
                         <div style="display: flex; justify-content: space-between; padding:20px 40px;   border:1px solid gainsboro">
                             <div>
                                 <p class="marketItmes storeName" style="font-weight: 550; font-size: 18px; margin-bottom: 10px; color:#ff3e3e;" th:onclick="getStoreDetail([[${list.store_id}]])" th:text="${list.store_name}"></p>
-                                <p class="marketItmes" ><span>📞 Tel : </span><span th:text="${list.market_tel}"></span></p>
-                                <p class="marketItmes" ><span>📭 Address : </span><span th:text="${list.location}"></span></p>
-                                <p class="marketItmes" ><span>🦰 Owner : </span><span th:text="${list.name}"></span></p>
+                                <p class="marketItmes" ><span style="font-weight: bold">📞 Tel : </span><span th:text="${list.market_tel}"></span></p>
+                                <p class="marketItmes" ><span style="font-weight: bold">📭 Address : </span><span th:text="${list.location}"></span></p>
+                                <p class="marketItmes" ><span style="font-weight: bold">🦰 Owner : </span><span th:text="${list.name}"></span></p>
                             </div>
                             <div>
                                 <img class="qrImg" th:src="@{https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl=http://localhost:8080/market/menuList/}+${list.store_id}" alt="" th:onclick="getQRCode([[${list.store_id}]])">
@@ -83,7 +83,7 @@
         }
 
         function getStoreDetail(store_id){
-            location.href = '/admin/storeDetail/' + store_id;
+            location.href = '/admin/storeDetail/' + store_id +'/1';
         }
     </script>
 
