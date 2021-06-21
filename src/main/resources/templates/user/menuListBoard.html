@@ -245,7 +245,6 @@
                     data:JSON.stringify({type:type, value: value, product_id:product_id}),
                     contentType: 'application/json;charset=UTF-8',
                     success:(returnValue)=>{
-                        alert(returnValue);
                         textParente.innerHTML='<span style="font-weight: bold">'+section+' : </span><span onclick="changeProductInfo(this,\'product_name\','+product_id+')">'+value+'</span>';
                     }
                 });

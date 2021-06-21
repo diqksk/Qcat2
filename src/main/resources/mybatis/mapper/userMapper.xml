@@ -68,6 +68,6 @@
     </insert>
 
     <select id="getResumeCount" resultType="int">
-        SELECT count(*) FROM resume
+        SELECT count(*) FROM resume where memberId=#{member_id} and roles=0
     </select>
 </mapper>

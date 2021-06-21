@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.Qcat.Qcat.admin.repository.AdminMapper">
+
+    <select id="getResumeList" parameterType="com.Qcat.Qcat.market.domain.Criteria" resultType="java.util.HashMap">
+        select * from resume r, member m WHERE r.memberId = m.member_id and r.roles=0 LIMIT #{amount} OFFSET #{offset}
+    </select>
+
+    <select id="countTotalResume" resultType="int">
+        SELECT count(*) FROM resume
+    </select>
+
+    <insert id="createNewStore" parameterType="java.util.HashMap">
+        INSERT INTO store(member_id,store_name,market_tel,location) VALUES(#{member_id},#{storeName},#{tel},#{location})
+    </insert>
+
+    <update id="updateResumeRole" parameterType="java.util.HashMap">
+        UPDATE resume SET roles=1 where resumeId = #{resumeId}
+    </update>
+
+    <delete id="refuseResume" parameterType="java.util.HashMap">
+        DELETE FROM resume WHERE resumeId=#{resumeId}
+    </delete>
+
+</mapper>

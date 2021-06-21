@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" th:href="@{/style.css}">
+
+    <link rel="icon" th:href="@{/img/core-img/favicon.ico}">
+
+
+
+    <!-- ##### All Javascript Script ##### -->
+    <!-- jQuery-2.2.4 js -->
+    <script th:src="@{/js/jquery/jquery-2.2.4.min.js}"></script>
+
+    <title>Title</title>
+    <style>
+        .modals{ position:absolute; width:100%; height:100%; background: rgba(0,0,0,0.8); top:0; left:0; display:none; z-index: 2000 }
+        .modal_content{
+            width:100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .contentZone input{
+            font-size: 20px;
+            margin:10px 0;
+            width:100%;
+            border:none;
+            padding:3px 3px 3px 30px;
+            background: none;
+        }
+        input:focus {
+            outline:none;
+        }
+        .contentLists{
+            padding:0 10px;
+            border-radius: 40px;
+            background: #d6d6d6;
+            margin-top:5px;
+        }
+        .itemBox{
+            width: 250px;
+            flex-wrap: wrap;
+            background: rgb(245,245,245);
+            margin-bottom: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+        .itemBox:hover{
+            cursor: pointer;
+        }
+        .titleBox:hover{
+            transition:all 0.4s;
+            background: lightpink;
+        }
+        .titleBox{
+            padding: 10px 15px 5px 15px;
+            background: #b1d4e5;
+            font-weight: bold;
+            text-align: center;
+        }
+        .pagings:hover{
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <th:block th:replace="/layout/header.html :: header"></th:block>
+
+
+
+    <main>
+
+        <div class="signUpContainer" style="display: flex; justify-content: center">
+
+            <div style="width:55%; padding:30px; ">
+                <div>
+                    <h2>지원목록</h2>
+                </div>
+                <div>
+                    <div class="ItemInfo" style="display: flex; flex-wrap: wrap; justify-content: space-between" >
+                        <div class="itemBox" th:each="list:${lists}" th:onclick="getModalInfo([[${list}]])">
+                            <div class="titleBox">
+                                <span th:text="${list.title}"></span>
+                            </div>
+                            <div class="dateBox" style=" text-align:center; padding:5px 15px 10px 15px">
+                                <span  th:text="${#strings.substring(list.resumeRegdate,0,16)}"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div>
+                    <p style="text-align: center"><span class="pagings" th:each="num : ${#numbers.sequence(1,total)}" th:if="${total>0}" th:onclick="getPaging([[${num}]])">[<span  th:text="${num}"></span>]</span></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+    <div class="modals">
+        <div class="modal_content" title="클릭하면 창이 닫힙니다.">
+            <div>
+                <div class="resumeContainer" style="padding:50px 100px; background: rgb(245,245,245)" >
+                    <form action="/acceptResume" method="POST">
+                        <div class="contentZone">
+                            <div style="margin-bottom: 20px;"><span style="font-weight: bold">🧾지원 제목</span><div class="contentLists"><input name="title" class="contentItemInput" type="text" readonly placeholder="신청 제목"></div></div>
+                            <div style="margin-bottom: 20px;"><span style="font-weight: bold">📣점포 이름</span><div class="contentLists"><input name="storeName" readonly class="contentItemInput" type="text" placeholder="점포명"></div></div>
+                            <div style="margin-bottom: 20px;"><span style="font-weight: bold">☎TEL</span><div class="contentLists"><input name="tel" class="contentItemInput" type="text" readonly placeholder="점포 전화번호"></div></div>
+                            <div style="margin-bottom: 20px;"><span style="font-weight: bold">🍗취급 품목</span><div class="contentLists"><input name="productsName" class="contentItemInput" type="text readonly" placeholder="취급품목"></div></div>
+                            <div style="margin-bottom: 20px;"><span style="font-weight: bold">🌏주소</span>
+                            <div class="contentLists">
+                               <input  name="location" class="contentItemInput" type="text" id="sample5_address" readonly placeholder="주소">
+                                <input class="contentItemInput" type="hidden" name="resumeId" value="">
+                                <input class="contentItemInput" type="hidden" name="member_id" value="">
+                            </div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <textarea id="textZones" style="width: 100%; border: 1px solid #cecece; padding:10px; resize: none" name="content" cols="30" rows="10" placeholder="지원사유"></textarea>
+                        </div>
+                        <div style="text-align: right">
+                            <input type="submit" name="전송" value="거절">
+                            <input type="submit" name="전송" value="수락">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <th:block th:replace="/layout/footer.html :: footer"></th:block>
+
+
+    <script>
+        $(function(){
+            $("button").click(function () {
+                $(".modals").fadeIn();
+            });
+
+            $(".modal_content").click(function () {
+                $(".modals").fadeOut();
+
+            });
+        });
+
+
+        function getPaging(num){
+            location.href=num;
+        }
+
+        function getModalInfo(list){
+            const textZones = document.getElementById('textZones');
+            const contentItemInput = document.querySelectorAll('.contentItemInput');
+            contentItemInput[0].value = list.title;
+            contentItemInput[1].value = list.storeName;
+            contentItemInput[2].value = list.tel;
+            contentItemInput[3].value = list.productsName;
+            contentItemInput[4].value = list.location;
+            contentItemInput[5].value = list.resumeId;
+            contentItemInput[6].value = list.memberId;
+            textZones.value = list.content;
+            $(".modals").fadeIn();
+        }
+    </script>
+    <!-- Popper js -->
+    <script th:src="@{/js/bootstrap/popper.min.js}"></script>
+    <!-- Bootstrap js -->
+    <script th:src="@{/js/bootstrap/bootstrap.min.js}"></script>
+    <!-- All Plugins js -->
+    <script th:src="@{/js/plugins/plugins.js}"></script>
+    <!-- Active js -->
+    <script th:src="@{/js/active.js}"></script>
+</body>
+</html>

@@ -20,20 +20,33 @@ public class UserController {
     @Autowired
     UserService userService;
 
+
     @GetMapping("/login")
     public String getLoginPage(){
         return "/user/login";
     }
 
+    @GetMapping("/logout")
+    public String getLogOutPage(HttpSession session){
+        session.invalidate();
+        return "redirect:/login";
+    }
+
+
     @GetMapping("/admin/board")
     public String getMyRestaurant(Model model, HttpSession session){
         List<HashMap<String,Object>> lists =userService.getStoreList((String) session.getAttribute("login_id"));
+        int resumeCount = userService.getResumeCount(Integer.parseInt((String) session.getAttribute("member_id")));
 
-        if(lists.size()==0 && userService.getResumeCount(Integer.parseInt((String)session.getAttribute("member_id"))) == 0){
+        if(session.getAttribute("login_id").equals("admin")){
+            return "redirect:/admin/acceptBoard/1";
+        }
+
+        if(lists.size()==0 && resumeCount == 0){
             return "/user/board";
-        }else if(lists.size()==0 && userService.getResumeCount(Integer.parseInt((String)session.getAttribute("member_id"))) >0) {
+        }else if(lists.size()==0 && resumeCount >0) {
             return "/user/resumeResultPage";
-        } else{
+        }else{
             System.out.println(lists.get(0).get("store_id"));
             session.setAttribute("store_id",lists.get(0).get("store_id"));
             model.addAttribute("lists", lists);
@@ -99,6 +112,6 @@ public class UserController {
         formData.put("member_id", session.getAttribute("member_id"));
         System.out.println(formData);
         userService.insertResume(formData);
-        return "redirect:/user/board";
+        return "redirect:/admin/board";
     }
 }

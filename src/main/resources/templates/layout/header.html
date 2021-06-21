@@ -144,7 +144,8 @@
 
                                 <!-- Login/Register -->
                                 <div class="login-area">
-                                    <a href="/login">Login / Register</a>
+                                    <a th:if="${session.member_id==null}" href="/login">Login / Register</a>
+                                    <a th:if="${session.member_id!=null}" href="/logout">Log Out</a>
                                 </div>
                             </div>
                             <!-- Nav End -->
