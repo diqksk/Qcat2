@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" th:href="@{/style.css}">
+
+    <link rel="icon" th:href="@{/img/core-img/favicon.ico}">
+
+
+
+    <!-- ##### All Javascript Script ##### -->
+    <!-- jQuery-2.2.4 js -->
+    <script th:src="@{/js/jquery/jquery-2.2.4.min.js}"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=36a4719be682efed3e5e93a6779b32a2&libraries=services"></script>
+
+    <title>Title</title>
+
+    <style>
+        .qrImg:hover{
+            cursor: pointer;
+        }
+        .marketItmes{
+            margin:0;
+        }
+        .modals{ position:absolute; width:100%; height:100%; background: rgba(0,0,0,0.8); top:0; left:0; display:none; z-index: 2000 }
+        .modal_content{
+            width:100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .storeName:hover{
+            color: #3d69f0 !important;
+            transition: all 0.8s !important;
+            cursor: pointer;
+        }
+        .contentZone input{
+            font-size: 20px;
+            margin:10px 0;
+            width:100%;
+            border:none;
+            padding:3px 3px 3px 30px;
+            background: none;
+        }
+        input:focus {
+            outline:none;
+        }
+        .contentLists{
+            padding:0 10px;
+            border-radius: 40px;
+            background: #d6d6d6;
+            margin-top:5px;
+        }
+
+
+    </style>
+</head>
+<body>
+    <th:block th:replace="/layout/header.html :: header"></th:block>
+
+    <main style="margin:30px 0;">
+        <div class="boardContainer">
+            <div class="centerBox" style="display: flex; justify-content: center">
+                <div class="listBox" style="width:37%;" >
+                    <div>
+                        <div class="resumeContainer" style="padding:50px 100px; background: rgb(245,245,245)" >
+                            <div style="text-align: center; margin-bottom: 70px; font-size: 50px">
+                                <h2>안내</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modals">
+        <div class="modal_content" title="클릭하면 창이 닫힙니다.">
+            <div style="background: white; border-radius: 20px; width: 250px; overflow: hidden">
+                <div style="background: tomato; padding-left: 20px;"><span style="font-size: 20px; font-weight: bold ">안내</span></div>
+                <div style="padding:25px; height: 80px;"><span>관리자가 양식을 확인중입니다..</span></div>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:replace="/layout/footer.html :: footer"></th:block>
+
+    <script>
+        $(function () {
+            $(".modals").fadeIn();
+
+            $(".modal_content").click(function () {
+                location.href = "/login";
+            });
+        });
+
+    </script>
+    <!-- Popper js -->
+    <script th:src="@{/js/bootstrap/popper.min.js}"></script>
+    <!-- Bootstrap js -->
+    <script th:src="@{/js/bootstrap/bootstrap.min.js}"></script>
+    <!-- All Plugins js -->
+    <script th:src="@{/js/plugins/plugins.js}"></script>
+    <!-- Active js -->
+    <script th:src="@{/js/active.js}"></script>
+</body>
+</html>
