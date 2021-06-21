@@ -15,7 +15,8 @@
     <!-- ##### All Javascript Script ##### -->
     <!-- jQuery-2.2.4 js -->
     <script th:src="@{/js/jquery/jquery-2.2.4.min.js}"></script>
-
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=36a4719be682efed3e5e93a6779b32a2&libraries=services"></script>
 
     <title>Title</title>
 
@@ -39,6 +40,23 @@
             transition: all 0.8s !important;
             cursor: pointer;
         }
+        .contentZone input{
+            font-size: 20px;
+            margin:10px 0;
+            width:100%;
+            border:none;
+            padding:3px 3px 3px 30px;
+            background: none;
+        }
+        input:focus {
+            outline:none;
+        }
+        .contentLists{
+            padding:0 10px;
+            border-radius: 40px;
+            background: #d6d6d6;
+            margin-top:5px;
+        }
 
 
     </style>
@@ -49,10 +67,12 @@
     <main style="margin:30px 0;">
         <div class="boardContainer">
             <div class="centerBox" style="display: flex; justify-content: center">
-                <div class="listBox" style="width:70%;">
+                <div class="listBox" style="width:70%;" th:if="${session.store_id!=null}">
+
                     <div>
                         <p style="font-weight: bold; color: black; font-size: 25px;">내 가게 목록</p>
                     </div>
+
                     <div  th:each="list : ${lists}" style="padding:10px; margin:20px 0;background: rgb(245,245,245);">
                         <div style="display: flex; justify-content: space-between; padding:20px 40px;   border:1px solid gainsboro">
                             <div>
@@ -66,10 +86,38 @@
                             </div>
                         </div>
                     </div>
+
+                </div>
+                <div class="listBox" style="width:37%;" th:if="${session.store_id==null}">
+
+                    <div>
+                        <div class="resumeContainer" style="padding:50px 100px; background: rgb(245,245,245)" >
+                            <div style="text-align: center; margin-bottom: 70px; font-size: 50px">
+                                <h2>Sign Up</h2>
+                            </div>
+                            <form action="/admin/submitResume" method="POST" onsubmit="return checkResume()">
+                                <div class="contentZone">
+                                    <div style="margin-bottom: 20px;"><span style="font-weight: bold">🧾지원 제목</span><div class="contentLists"><input name="title" class="contentItemInput" type="text" placeholder="신청 제목"></div></div>
+                                    <div style="margin-bottom: 20px;"><span style="font-weight: bold">📣점포 이름</span><div class="contentLists"><input name="storeName" class="contentItemInput" type="text" placeholder="점포명"></div></div>
+                                    <div style="margin-bottom: 20px;"><span style="font-weight: bold">☎TEL</span><div class="contentLists"><input name="tel" class="contentItemInput" type="text" placeholder="점포 전화번호"></div></div>
+                                    <div style="margin-bottom: 20px;"><span style="font-weight: bold">🍗취급 품목</span><div class="contentLists"><input name="productsName" class="contentItemInput" type="text" placeholder="취급품목"></div></div>
+                                    <div style="margin-bottom: 20px;"><span style="font-weight: bold">🌏주소</span><div class="contentLists"><input  name="location" class="contentItemInput" type="text" id="sample5_address" placeholder="주소" onclick="sample5_execDaumPostcode()"></div></div>
+                                    <div style="display: flex; justify-content: center"><div id="map" style="width:300px;height:300px;margin-top:10px;display:none"></div></div>
+                                </div>
+                                <div style="margin-top: 20px;">
+                                    <textarea id="textZones" style="width: 100%; border: 1px solid #cecece; padding:10px; resize: none" name="content" cols="30" rows="10" placeholder="지원사유"></textarea>
+                                </div>
+                                <div style="text-align: right">
+                                    <input type="submit">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
+
     <div class="modals"> <div class="modal_content" title="클릭하면 창이 닫힙니다."><img id="modalImh" style="width: 45vw; height: 45vw;" src="https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl=http://121.161.137.131:8080/market/menuList/1" alt=""> </div> </div>
 
     <th:block th:replace="/layout/footer.html :: footer"></th:block>
@@ -87,6 +135,89 @@
         }
     </script>
 
+    <script>
+        const mapContainer = document.getElementById('map'), // 지도를 표시할 div
+            mapOption = {
+                center: new daum.maps.LatLng(37.537187, 127.005476), // 지도의 중심좌표
+                level: 5 // 지도의 확대 레벨
+            };
+
+        //지도를 미리 생성
+        let map = new daum.maps.Map(mapContainer, mapOption);
+        //주소-좌표 변환 객체를 생성
+        let geocoder = new daum.maps.services.Geocoder();
+        //마커를 미리 생성
+        let marker = new daum.maps.Marker({
+            position: new daum.maps.LatLng(37.537187, 127.005476),
+            map: map
+        });
+
+
+        function sample5_execDaumPostcode() {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    let addr = data.address; // 최종 주소 변수
+
+                    // 주소 정보를 해당 필드에 넣는다.
+                    document.getElementById("sample5_address").value = addr;
+                    // 주소로 상세 정보를 검색
+                    geocoder.addressSearch(data.address, function(results, status) {
+                        // 정상적으로 검색이 완료됐으면
+                        if (status === daum.maps.services.Status.OK) {
+
+                            let result = results[0]; //첫번째 결과의 값을 활용
+
+                            // 해당 주소에 대한 좌표를 받아서
+                            let coords = new daum.maps.LatLng(result.y, result.x);
+                            // 지도를 보여준다.
+                            mapContainer.style.display = "block";
+                            map.relayout();
+                            // 지도 중심을 변경한다.
+                            map.setCenter(coords);
+                            // 마커를 결과값으로 받은 위치로 옮긴다.
+                            marker.setPosition(coords)
+                        }
+                    });
+                }
+            }).open();
+        }
+    </script>
+
+    <script defer>
+        function checkResume(){
+            const contentItemInput = document.querySelectorAll('.contentItemInput');
+            const textZones = document.getElementById('textZones');
+            console.log(textZones.value);
+            for(let i = 0 ; i < contentItemInput.length ; i++){
+                console.log(contentItemInput[i].value);
+            }
+            if(contentItemInput[0].value===""){
+                alert("제목을 입력해주세요.");
+                return false;
+            }else if(contentItemInput[1].value===""){
+                alert("점포명을 입력해주세요.")
+                return false;
+            }else if(contentItemInput[2].value===""){
+                alert("전화번호를 입력해주세요.")
+                return false;
+            }else if(contentItemInput[3].value===""){
+                alert("취급품목을 입력해주세요.")
+                return false;
+            }else if(contentItemInput[4].value===""){
+                alert("주소를 입력해주세요.")
+                return false;
+            }else if(textZones.value===""){
+                alert("지원사유를 입력해주세요.");
+                return false;
+            }else{
+                alert("제출되었습니다.")
+                return true;
+            }
+
+
+
+        }
+    </script>
     <!-- Popper js -->
     <script th:src="@{/js/bootstrap/popper.min.js}"></script>
     <!-- Bootstrap js -->

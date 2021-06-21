@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-public class TestController {
+public class MarketController {
 
     @Autowired
     MenuService menuService;

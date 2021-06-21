@@ -7,10 +7,9 @@ import com.Qcat.Qcat.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
@@ -29,16 +28,24 @@ public class UserController {
     @GetMapping("/admin/board")
     public String getMyRestaurant(Model model, HttpSession session){
         List<HashMap<String,Object>> lists =userService.getStoreList((String) session.getAttribute("login_id"));
-        System.out.println(lists.get(0).get("store_id"));
-        session.setAttribute("store_id",lists.get(0).get("store_id"));
-        model.addAttribute("lists", lists);
-        return "/user/board";
+
+        if(lists.size()==0 && userService.getResumeCount(Integer.parseInt((String)session.getAttribute("member_id"))) == 0){
+            return "/user/board";
+        }else if(lists.size()==0 && userService.getResumeCount(Integer.parseInt((String)session.getAttribute("member_id"))) >0) {
+            return "/user/resumeResultPage";
+        } else{
+            System.out.println(lists.get(0).get("store_id"));
+            session.setAttribute("store_id",lists.get(0).get("store_id"));
+            model.addAttribute("lists", lists);
+            return "/user/board";
+        }
     }
 
     @PostMapping("/checkLoginAdmin")
     public String getLoginSession(UserDto dto, HttpSession session){
         System.out.println(dto.getLogin_id());
         session.setAttribute("login_id",dto.getLogin_id());
+        session.setAttribute("member_id",userService.addLoginSession((String)session.getAttribute("login_id")));
         return "redirect:/admin/board";
     }
 
@@ -55,7 +62,9 @@ public class UserController {
     }
 
     @GetMapping("/admin/storeDetail/{store_id}/{page}")
-    public String getMenuList(@PathVariable("store_id") int store_id, @PathVariable("page") int page, Model model){
+    public String getMenuList(@PathVariable("store_id") int store_id, @PathVariable("page") int page, Model model, HttpServletRequest request){
+
+        String category = request.getParameter("category");
 
         MenuDto dto = new MenuDto();
         dto.setStore_id(store_id);
@@ -63,15 +72,33 @@ public class UserController {
         int amount = 10;
 
         Criteria cri = new Criteria(page, amount);
-        int total = (int) Math.ceil(userService.getPageSize(store_id) * 1.0 / amount);
 
+        if(category == null){
+            int total = (int) Math.ceil(userService.getPageSize(store_id) * 1.0 / amount);
+            model.addAttribute("lists", userService.getTotalPaging(dto, cri));
+            model.addAttribute("total", total);
+            System.out.println(total);
+        }else{
+            dto.setCategory(category);
+            HashMap<String, Object> cate = new HashMap<String, Object>();
+            cate.put("cate", category);
+            cate.put("store_id", store_id);
+            int total = (int) Math.ceil(userService.getCatPageSize(cate) * 1.0 / amount);
+            model.addAttribute("lists", userService.getCatTotalPaging(dto, cri));
+            model.addAttribute("total", total);
 
-        model.addAttribute("lists", userService.getTotalPaging(dto, cri));
-        model.addAttribute("total", total);
+        }
         model.addAttribute("category", userService.getCategoryCount(store_id));
-
         model.addAttribute("store_id", store_id);
 
         return "/user/menuListBoard";
+    }
+
+    @PostMapping("/admin/submitResume")
+    public String submitResume(@RequestParam HashMap<String,Object> formData, HttpSession session){
+        formData.put("member_id", session.getAttribute("member_id"));
+        System.out.println(formData);
+        userService.insertResume(formData);
+        return "redirect:/user/board";
     }
 }

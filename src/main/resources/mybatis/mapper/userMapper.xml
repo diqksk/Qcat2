@@ -15,6 +15,10 @@
         <result column="product_regdate" property="product_regdate"/>
     </resultMap>
 
+    <select id="addLoginSession" parameterType="String" resultType="String">
+        SELECT member_id FROM member WHERE login_id = #{login_id}
+    </select>
+
     <select id="checkSignUp" resultType="Integer" parameterType="java.util.HashMap">
         SELECT count(#{type}) FROM member WHERE ${type} = #{value}
     </select>
@@ -35,8 +39,16 @@
         select * from product WHERE store_id = #{dto.store_id} ORDER BY category DESC LIMIT #{cri.amount} OFFSET #{cri.offset}
     </select>
 
+    <select id="getCatTotalPaging" resultMap="dtoBase">
+        select * from product WHERE store_id = #{dto.store_id} and category=#{dto.category} ORDER BY category DESC LIMIT #{cri.amount} OFFSET #{cri.offset}
+    </select>
+
     <select id="getPageSize" parameterType="int" resultType="int">
         SELECT count(*) FROM product where store_id = #{store_id}
+    </select>
+
+    <select id="getCatPageSize" parameterType="java.util.HashMap" resultType="int">
+        SELECT count(*) FROM product where store_id = #{store_id} AND category = #{cate}
     </select>
 
     <select id="getCategoryCount" parameterType="int" resultType="java.util.HashMap">
@@ -51,4 +63,11 @@
         DELETE FROM product WHERE product_id = #{product_id}
     </delete>
 
+    <insert id="insertResume" parameterType="java.util.HashMap">
+        INSERT INTO resume(memberId, title, storeName, tel, location, productsName, content) VALUES(#{member_id},#{title},#{storeName},#{tel},#{location},#{productsName},#{content})
+    </insert>
+
+    <select id="getResumeCount" resultType="int">
+        SELECT count(*) FROM resume
+    </select>
 </mapper>

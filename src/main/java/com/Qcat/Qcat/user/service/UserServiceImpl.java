@@ -60,4 +60,29 @@ public class UserServiceImpl implements UserService{
     public int deleteMenu(HashMap<String, Object> json) {
         return userMapper.deleteMenu(json);
     }
+
+    @Override
+    public int getCatPageSize(HashMap<String, Object> cate) {
+        return userMapper.getCatPageSize(cate);
+    }
+
+    @Override
+    public List<MenuDto> getCatTotalPaging(MenuDto dto, Criteria cri) {
+        return userMapper.getCatTotalPaging(dto,cri);
+    }
+
+    @Override
+    public String addLoginSession(String login_id) {
+        return userMapper.addLoginSession(login_id);
+    }
+
+    @Override
+    public int insertResume(HashMap<String, Object> formData) {
+        return userMapper.insertResume(formData);
+    }
+
+    @Override
+    public int getResumeCount(int member_id) {
+        return userMapper.getResumeCount(member_id);
+    }
 }

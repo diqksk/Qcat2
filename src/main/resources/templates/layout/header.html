@@ -54,7 +54,8 @@
 
         <!-- Logo Area -->
         <div class="logo-area">
-            <a href="../../../../../../../bueno-master/bueno-master/index.html"><img src="/img/core-img/logo.png" alt=""></a>
+            <a th:if="${session.store_id != null}" href="/login"><img src="/img/core-img/logo.png" alt=""></a>
+            <a th:if="${session.store_id == null}" href="/admin/board"><img src="/img/core-img/logo.png" alt=""></a>
         </div>
 
         <!-- Navbar Area -->
